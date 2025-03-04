@@ -17,7 +17,7 @@ from models import *
 
 
 class Monitor:
-    def __init__(self, relative_db_path="db/ecal_monitoring.db"):
+    def __init__(self, relative_db_path="/mnt/c/Users/d93609/Documents/projects/ecal-grafana-dashboard/db/ecal_monitoring.db"):
         self.processes = {}  
         self.prvious_processes = {}
         self.dropped_processes = {}

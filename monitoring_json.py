@@ -53,7 +53,7 @@ if __name__ == "__main__":
         "-d",
         "--db-path",
         type=str,
-        default="db/ecal_monitoring.db",
+        default="/mnt/c/Users/d93609/Documents/projects/ecal-grafana-dashboard/db/ecal_monitoring.db",
         help="Path (relative) to the database file (default: db/ecal_monitoring.db).",
     )
 
