@@ -1,0 +1,237 @@
+{
+  "processes": [
+    {
+      "rclock": 1000,
+      "hname": "P14SNB436",
+      "shm_transport_domain": "P14SNB436",
+      "pid": 32215,
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "pparam": "python3 monitoring_json.py --interval 1",
+      "state_severity": 5,
+      "state_severity_level": 1,
+      "state_info": "",
+      "tsync_state": 7,
+      "tsync_mod_name": "ecaltime-localtime",
+      "component_init_state": 63,
+      "component_init_info": "pub|sub|log|time",
+      "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
+    },
+    {
+      "rclock": 10,
+      "hname": "Lennart2",
+      "shm_transport_domain": "Lennart2",
+      "pid": 32216,
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "pparam": "python3 monitoring_json.py --interval 1",
+      "state_severity": 2,
+      "state_severity_level": 4,
+      "state_info": "",
+      "tsync_state": 0,
+      "tsync_mod_name": "ecaltime-localtime",
+      "component_init_state": 62,
+      "component_init_info": "pub|sub|log|time",
+      "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
+    }
+  ],
+  "services": [
+    {
+      "rclock": 1,
+      "hname": "Service_HNAME",
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "pid": 32214,
+      "sname": "Service_SNAME",
+      "sid": "32214",
+      "version": 0
+    }
+  ],
+  "clients": [
+    {
+      "rclock": 1,
+      "hname": "Client_HNAME",
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "pid": 32217,
+      "sname": "Client_SNAME",
+      "sid": "32217",
+      "version": 0
+    },
+    {
+      "rclock": 1,
+      "hname": "Client_HNAME",
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "pid": 32218,
+      "sname": "Client_SNAME",
+      "sid": "32218",
+      "version": 0
+    },
+    {
+      "rclock": 1,
+      "hname": "Client_HNAME",
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "pid": 32219,
+      "sname": "Client_SNAME",
+      "sid": "32219",
+      "version": 0
+    }
+  ],
+  "topics": [
+    {
+      "rclock": 16,
+      "hname": "P14SNB436",
+      "shm_transport_domain": "P14SNB436",
+      "pid": 32215,
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "tid": "62245384603949",
+      "tname": "ms_P14SNB436",
+      "direction": "publisher",
+      "tdatatype_name": "eCAL.pb.mma.State",
+      "tdatatype_encoding": "proto",
+      "tdatatype_descriptor": "tdatatype_descriptor_P14SNB436",
+      "layer": [
+        {
+          "type": "tl_ecal_udp_mc",
+          "version": 0,
+          "active": false
+        },
+        {
+          "type": "tl_ecal_shm",
+          "version": 0,
+          "active": true
+        },
+        {
+          "type": "tl_ecal_tcp",
+          "version": 0,
+          "active": false
+        }
+      ],
+      "tsize": 8700,
+      "connections_loc": 1000,
+      "connections_ext": 200,
+      "message_drops": 150,
+      "did": 1,
+      "dclock": 54,
+      "dfreq": 1000,
+      "throughout": 120.123
+    },
+    {
+      "rclock": 16,
+      "hname": "P14SNB432",
+      "shm_transport_domain": "P14SNB432",
+      "pid": 32211,
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "tid": "62245384603942",
+      "tname": "ms_P14SNB432",
+      "direction": "subscriber",
+      "tdatatype_name": "eCAL.pb.mma.State",
+      "tdatatype_encoding": "proto",
+      "tdatatype_descriptor": "tdatatype_descriptor_P14SNB432",
+      "layer": [
+        {
+          "type": "tl_ecal_udp_mc",
+          "version": 0,
+          "active": true
+        },
+        {
+          "type": "tl_ecal_shm",
+          "version": 0,
+          "active": false
+        },
+        {
+          "type": "tl_ecal_tcp",
+          "version": 0,
+          "active": false
+        }
+      ],
+      "tsize": 7600,
+      "connections_loc": 1000,
+      "connections_ext": 200,
+      "message_drops": 81,
+      "did": 1,
+      "dclock": 54,
+      "dfreq": 1000
+    },
+    {
+      "rclock": 16,
+      "hname": "P14SNB434",
+      "shm_transport_domain": "P14SNB434",
+      "pid": 32210,
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "tid": "62245384603944",
+      "tname": "ms_P14SNB434",
+      "direction": "subscriber",
+      "tdatatype_name": "eCAL.pb.mma.State",
+      "tdatatype_encoding": "proto",
+      "tdatatype_descriptor": "tdatatype_descriptor_P14SNB434",
+      "layer": [
+        {
+          "type": "tl_ecal_udp_mc",
+          "version": 0,
+          "active": false
+        },
+        {
+          "type": "tl_ecal_shm",
+          "version": 0,
+          "active": false
+        },
+        {
+          "type": "tl_ecal_tcp",
+          "version": 0,
+          "active": true
+        }
+      ],
+      "tsize": 2200,
+      "connections_loc": 1000,
+      "connections_ext": 200,
+      "message_drops": 20,
+      "did": 1,
+      "dclock": 54,
+      "dfreq": 1000
+    },
+    {
+      "rclock": 16,
+      "hname": "Lennart",
+      "shm_transport_domain": "Lennart",
+      "pid": 32214,
+      "pname": "/usr/bin/python3.12",
+      "uname": "python3",
+      "tid": "62245384603948",
+      "tname": "ms_Lennart",
+      "direction": "subscriber",
+      "tdatatype_name": "eCAL.pb.mma.State",
+      "tdatatype_encoding": "proto",
+      "tdatatype_descriptor": "tdatatype_descriptor_Lennart",
+      "layer": [
+        {
+          "type": "tl_ecal_udp_mc",
+          "version": 0,
+          "active": false
+        },
+        {
+          "type": "tl_ecal_shm",
+          "version": 0,
+          "active": false
+        },
+        {
+          "type": "tl_ecal_tcp",
+          "version": 0,
+          "active": false
+        }
+      ],
+      "tsize": 68000,
+      "connections_loc": 1000,
+      "connections_ext": 200,
+      "message_drops": 10,
+      "did": 10,
+      "dclock": 54000,
+      "dfreq": 100
+    }
+  ]
+}

@@ -184,6 +184,7 @@ class Monitor:
             }
 
             self.process_performances[hname][process["id"]] = process_information
+            
 
     def update_host_graph(self):
         hosts = defaultdict(lambda: {"disk_usage": 0, "ram_usage": 0, "cpu_load": 0})
@@ -224,6 +225,14 @@ class Monitor:
             self.process_performances,
         )
 
+    # def wrapper(func):
+    #     def inner(*args, **kwargs):
+    #         print("Start callback")
+    #         func(*args, **kwargs)
+    #         print("finish callback")
+    #     return inner
+        
+    # @wrapper
     def host_monitor_callback_no_db(self, topic_name, msg, time):
         hname = topic_name.split("_")[2]
         host = MessageToDict(message=msg)
@@ -232,7 +241,7 @@ class Monitor:
         ecal_pids = {pid for pid, p in self.processes.items() if p["hname"] == hname}
         ecal_processes = [p for p in host["process"] if p["id"] in ecal_pids]
         self.update_processes_information(hname, ecal_processes)
-
+    
     def update_mma_subscribers(self):
         hnames = {process["hname"] for process in self.processes.values()}
         removed_hosts = set(self.mma_subscribers.keys()).difference(hnames)
@@ -263,8 +272,8 @@ class Monitor:
                         "message": f"[STOPPED HOST] stop monitoring host {hname}",
                         "level": "critical",
                     }
-                )
-
+                )       
+            
     def write_to_db(self):
         with self.Session() as session:
             session.query(CurrentProcess).delete()
@@ -338,12 +347,77 @@ class Monitor:
 
             session.bulk_insert_mappings(Log, self.logs)
             session.commit()
+            
         self.logs = []
-
-    def update_monitor(self, ecal_data):
+        
+    def write_to_json(self, ecal_data):
         monitoring_d = convert_bytes_to_str(ecal_data, handle_bytes="decode")
         monitoring = monitoring_d[1]
+                
+        all_data = {
+            "processes": monitoring["processes"],
+            "topics": monitoring["topics"],
+            "services": monitoring["services"],
+            "clients": monitoring["clients"],
+            "current_processes": list(self.processes.values()),
+            "current_services": list(self.services.values()),
+            "current_topics": list(self.topics.values()),
+            "current_clients": list(self.clients.values()),
+            "previous_processes": list(self.previous_processes.values()),
+            "previous_services": list(self.previous_services.values()),
+            "previous_topics": list(self.previous_topics.values()),
+            "previous_clients": list(self.previous_clients.values()),
+            "process_performances": list(self.process_performances.items()),
+            "dropped_processes": list(self.dropped_processes.items()),
+            "hosts": list(self.hosts.items()),
+            "host_nodes": list(self.host_nodes.values()),
+            "host_edges": list(self.host_edges.values()),
+            "pub_sub_topic_nodes": list(self.pub_sub_topic_nodes.values()),
+            "pub_sub_topic_edges": list(self.pub_sub_topic_edges.values()),
+            "process_nodes": list(self.process_nodes.values()),
+            "process_edges": list(self.process_edges.values()),
+            "client_server_nodes": list(self.client_server_nodes.values()),
+            "client_server_edges": list(self.client_server_edges.values()),
+            "logs": list(self.logs)
+        }
+        with open('JSON/monitoring_data.json', 'w') as json_file:
+            json.dump(all_data, json_file, indent=4)
+            
+    def read_from_json(self):
+        with open('JSON/monitoring_data.json', 'r') as json_file:
+            data = json.load(json_file)
+            
+            processes = data["processes"]
+            services = data["services"]
+            topics = data["topics"]
+            clients = data["clients"]
+            self.previous_processes = data["previous_processes"]
+            self.previous_services = data["previous_services"]
+            self.previous_topics = data["previous_topics"]
+            self.previous_clients = data["previous_clients"]
+            self.process_performances = {
+                hname: {int(pid): performance for pid, performance in performance_dict.items()}
+                for hname, performance_dict in data["process_performances"]
+            }
+            self.dropped_processes = dict(data["dropped_processes"])
+            self.hosts = dict(data["hosts"])
+            self.host_nodes = data["host_nodes"]
+            self.host_edges = data["host_edges"]
+            self.pub_sub_topic_nodes = data["pub_sub_topic_nodes"]
+            self.pub_sub_topic_edges = data["pub_sub_topic_edges"]
+            self.process_nodes = data["process_nodes"]
+            self.process_edges = data["process_edges"]
+            self.client_server_nodes = data["client_server_nodes"]
+            self.client_server_edges = data["client_server_edges"]
+            self.logs = data["logs"]
+            return {"processes": processes, "services": services, "topics": topics, "clients": clients}
 
+    def update_monitor(self, ecal_data):
+        print("Update monitor")
+        # monitoring_d = convert_bytes_to_str(ecal_data, handle_bytes="decode")
+        # monitoring = monitoring_d[1]
+        monitoring = self.read_from_json()     
+        
         self.update_processes(monitoring["processes"])
         self.update_topics(monitoring["topics"])
         self.update_services(monitoring["services"])
@@ -354,6 +428,7 @@ class Monitor:
         self.update_process_graph()
         self.update_client_server_graph()
         self.update_mma_subscribers()
+        # self.write_to_json(ecal_data)
         self.write_to_db()
 
     def finalize_monitor(self):

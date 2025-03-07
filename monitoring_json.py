@@ -3,6 +3,9 @@ import ecal.core.core as ecal_core
 from monitor import Monitor
 import argparse
 
+# temp
+import json
+
 
 def main(interval, verbose, db_path):
     # print eCAL version and date
@@ -17,7 +20,7 @@ def main(interval, verbose, db_path):
 
     monitor = Monitor(relative_db_path=db_path)
 
-    while ecal_core.ok():
+    while ecal_core.ok():    
         monitor.update_monitor(ecal_data=ecal_core.mon_monitoring())
         if verbose:
             print("Monitoring data updated.")
