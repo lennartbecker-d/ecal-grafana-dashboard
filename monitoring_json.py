@@ -4,7 +4,9 @@ from monitor import Monitor
 import argparse
 
 # temp for live demo
-import json
+# import copy
+from manipulate_data import *
+import threading
 
 
 def main(interval, verbose, db_path):
@@ -19,10 +21,14 @@ def main(interval, verbose, db_path):
     time.sleep(2)
 
     monitor = Monitor(relative_db_path=db_path)
+    # manipulate_data = ManipulateData(monitor.read_from_json())
+    
+    # script_thread = threading.Thread(target=manipulate_data.run_script)
+    # script_thread.start()
     
     while ecal_core.ok():
-        ecal_data = monitor.read_from_json()
-        monitor.update_monitor(ecal_data)    
+        # monitor.update_monitor(manipulate_data.return_data())
+        monitor.update_monitor(monitor.read_from_json())    
         # monitor.update_monitor(ecal_data=ecal_core.mon_monitoring())
         if verbose:
             print("Monitoring data updated.")

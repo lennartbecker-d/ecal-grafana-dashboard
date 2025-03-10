@@ -120,6 +120,7 @@ def create_node(
 
 
 def get_arc_cpu(process_performances, hname, pid):
+    # print(process_performances)
     if process_performances:
         cpu_load = process_performances[hname][pid]["cpu_load"]
         if cpu_load == -1:

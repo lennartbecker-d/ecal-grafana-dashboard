@@ -414,7 +414,7 @@ class Monitor:
             # self.client_server_nodes = data["client_server_nodes"]
             # self.client_server_edges = data["client_server_edges"]
             # self.logs = data["logs"]
-            return {"processes": processes, "services": services, "topics": topics, "clients": clients}
+            return {"processes": processes, "services": services, "topics": topics, "clients": clients, "process_performances": self.process_performances, "hosts": self.hosts}
 
     def update_monitor(self, ecal_data):
         # monitoring_d = convert_bytes_to_str(ecal_data, handle_bytes="decode")
@@ -422,7 +422,9 @@ class Monitor:
         # with open('monitoring_data.json', 'r') as json_file:
         #     monitoring = json.load(json_file)
         # monitoring = self.read_from_json()
-        monitoring = ecal_data     
+        monitoring = ecal_data
+        self.hosts = ecal_data.get("hosts", {})
+        self.process_performances = ecal_data.get("process_performances", {})     
         
         self.update_processes(monitoring["processes"])
         self.update_topics(monitoring["topics"])
