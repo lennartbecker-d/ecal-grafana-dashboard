@@ -21,14 +21,15 @@ def main(interval, verbose, db_path):
     time.sleep(2)
 
     monitor = Monitor(relative_db_path=db_path)
-    # manipulate_data = ManipulateData(monitor.read_from_json())
+    manipulate_data = ManipulateData(monitor.read_from_json())
     
-    # script_thread = threading.Thread(target=manipulate_data.run_script)
-    # script_thread.start()
+    script_thread = threading.Thread(target=manipulate_data.run_script)
+    script_thread.start()
     
     while ecal_core.ok():
-        # monitor.update_monitor(manipulate_data.return_data())
-        monitor.update_monitor(monitor.read_from_json())    
+        # print(manipulate_data.return_data().get("topics", {}))
+        monitor.update_monitor(manipulate_data.return_data())
+        # monitor.update_monitor(monitor.read_from_json())    
         # monitor.update_monitor(ecal_data=ecal_core.mon_monitoring())
         if verbose:
             print("Monitoring data updated.")

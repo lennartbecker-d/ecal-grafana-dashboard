@@ -1,10 +1,10 @@
 {
     "processes": [
         {
-            "rclock": 19,
-            "hname": "P14SNB436",
-            "shm_transport_domain": "P14SNB436",
-            "pid": 408242,
+            "rclock": 15,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 100001,
             "pname": "/usr/bin/ecal_mma-5.13.3",
             "uname": "Machine Monitoring Agent",
             "pparam": "ecal_mma-5.13.3",
@@ -18,10 +18,10 @@
             "ecal_runtime_version": "v5.13.3"
         },
         {
-            "rclock": 18,
-            "hname": "P14SNB436",
-            "shm_transport_domain": "P14SNB436",
-            "pid": 408621,
+            "rclock": 14,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 100002,
             "pname": "/usr/bin/python3.12",
             "uname": "python3",
             "pparam": "python3 monitoring_json.py",
@@ -35,12 +35,46 @@
             "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
         },
         {
-            "rclock": 18,
-            "hname": "TopicP",
-            "shm_transport_domain": "TopicP",
-            "pid": 408620,
+            "rclock": 14,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 100003,
             "pname": "/usr/bin/python3.12",
             "uname": "python3",
+            "pparam": "python3 monitoring_json.py",
+            "state_severity": 0,
+            "state_severity_level": 1,
+            "state_info": "",
+            "tsync_state": 1,
+            "tsync_mod_name": "ecaltime-localtime",
+            "component_init_state": 63,
+            "component_init_info": "pub|sub|log|time",
+            "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
+        },
+        {
+            "rclock": 15,
+            "hname": "RearLight",
+            "udp_transport_domain": "RearLight",
+            "pid": 200001,
+            "pname": "/usr/bin/ecal_mma-5.13.3",
+            "uname": "Machine Monitoring Agent 2",
+            "pparam": "ecal_mma-5.13.3",
+            "state_severity": 1,
+            "state_severity_level": 0,
+            "state_info": "Running",
+            "tsync_state": 0,
+            "tsync_mod_name": "",
+            "component_init_state": 129,
+            "component_init_info": "pub",
+            "ecal_runtime_version": "v5.13.3"
+        },
+        {
+            "rclock": 14,
+            "hname": "RearLight",
+            "udp_transport_domain": "RearLight",
+            "pid": 200002,
+            "pname": "/usr/bin/python3.12",
+            "uname": "python3 2",
             "pparam": "python3 monitoring_json.py",
             "state_severity": 0,
             "state_severity_level": 1,
@@ -54,14 +88,14 @@
     ],
     "topics": [
         {
-            "rclock": 19,
-            "hname": "P14SNB436",
-            "shm_transport_domain": "P14SNB436",
-            "pid": 408242,
+            "rclock": 15,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 100001,
             "pname": "/usr/bin/ecal_mma-5.13.3",
             "uname": "Machine Monitoring Agent",
-            "tid": "68850288734915",
-            "tname": "machine_state_P14SNB436",
+            "tid": "1",
+            "tname": "machine_state_HPC",
             "direction": "publisher",
             "tdatatype_name": "eCAL.pb.mma.State",
             "tdatatype_encoding": "proto",
@@ -70,50 +104,12 @@
                 {
                     "type": "tl_ecal_udp_mc",
                     "version": 0,
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "tl_ecal_shm",
                     "version": 0,
-                    "active": true
-                },
-                {
-                    "type": "tl_ecal_tcp",
-                    "version": 0,
                     "active": false
-                }
-            ],
-            "tsize": 12470,
-            "connections_loc": 2,
-            "connections_ext": 0,
-            "message_drops": 0,
-            "did": 0,
-            "dclock": 34,
-            "dfreq": 993
-        },
-        {
-            "rclock": 19,
-            "hname": "TopicP",
-            "shm_transport_domain": "TopicP",
-            "pid": 100000,
-            "pname": "/usr/bin/ecal_mma-5.13.3",
-            "uname": "Machine Monitoring Agent",
-            "tid": "68850288734916",
-            "tname": "machine_state_TopicP",
-            "direction": "publisher",
-            "tdatatype_name": "eCAL.pb.mma.State",
-            "tdatatype_encoding": "proto",
-            "tdatatype_descriptor": "CqgHChllY2FsL2FwcC9wYi9tbWEvbW1hLnByb3RvEgtlQ0FMLnBiLm1tYSJWCgREaXNrEgwKBG5hbWUYASABKAkSDAoEcmVhZBgCIAEoARINCgV3cml0ZRgDIAEoARIRCglhdmFpbGFibGUYBCABKAQSEAoIY2FwYWNpdHkYBSABKAQiSgoHTmV0d29yaxIMCgRuYW1lGAEgASgJEgwKBHNlbmQYAiABKAESDwoHcmVjZWl2ZRgDIAEoARISCgppcF9hZGRyZXNzGAQgASgJIioKBk1lbW9yeRINCgV0b3RhbBgBIAEoBBIRCglhdmFpbGFibGUYAiABKAQiGgoLVGVtcGVyYXR1cmUSCwoDY3B1GAEgASgCIlIKD1Byb2Nlc3Nlc01lbW9yeRIgChhjdXJyZW50X3dvcmtpbmdfc2V0X3NpemUYASABKAQSHQoVcGVha193b3JraW5nX3NldF9zaXplGAIgASgEImsKDFByb2Nlc3Nlc0NQVRIXCg9jcHVfa2VybmVsX3RpbWUYASABKAQSFQoNY3B1X3VzZXJfdGltZRgCIAEoBBIZChFjcHVfY3JlYXRpb25fdGltZRgDIAEoBBIQCghjcHVfbG9hZBgEIAEoAiKwAQoHUHJvY2VzcxIMCgRuYW1lGAEgASgJEgoKAmlkGAIgASgNEhMKC2NvbW1hbmRsaW5lGAMgASgJEiwKBm1lbW9yeRgEIAEoCzIcLmVDQUwucGIubW1hLlByb2Nlc3Nlc01lbW9yeRImCgNjcHUYBSABKAsyGS5lQ0FMLnBiLm1tYS5Qcm9jZXNzZXNDUFUSEgoKZGVidWdfZmxhZxgGIAEoCBIMCgR1c2VyGAcgASgJIpUCCgVTdGF0ZRIQCghjcHVfbG9hZBgBIAEoARIjCgZtZW1vcnkYAiABKAsyEy5lQ0FMLnBiLm1tYS5NZW1vcnkSIAoFZGlza3MYAyADKAsyES5lQ0FMLnBiLm1tYS5EaXNrEiYKCG5ldHdvcmtzGAQgAygLMhQuZUNBTC5wYi5tbWEuTmV0d29yaxItCgt0ZW1wZXJhdHVyZRgFIAEoCzIYLmVDQUwucGIubW1hLlRlbXBlcmF0dXJlEiUKB3Byb2Nlc3MYBiADKAsyFC5lQ0FMLnBiLm1tYS5Qcm9jZXNzEhsKE251bWJlcl9vZl9jcHVfY29yZXMYByABKA0SGAoQb3BlcmF0aW5nX3N5c3RlbRgIIAEoCWIGcHJvdG8z",
-            "layer": [
-                {
-                    "type": "tl_ecal_udp_mc",
-                    "version": 0,
-                    "active": false
-                },
-                {
-                    "type": "tl_ecal_shm",
-                    "version": 0,
-                    "active": true
                 },
                 {
                     "type": "tl_ecal_tcp",
@@ -122,22 +118,22 @@
                 }
             ],
             "tsize": 1247,
-            "connections_loc": 2,
+            "connections_loc": 1,
             "connections_ext": 0,
-            "message_drops": 5,
+            "message_drops": 0,
             "did": 0,
-            "dclock": 34,
-            "dfreq": 993
+            "dclock": 17,
+            "dfreq": 990
         },
         {
-            "rclock": 16,
-            "hname": "P14SNB436",
-            "shm_transport_domain": "P14SNB436",
-            "pid": 408621,
+            "rclock": 12,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 100002,
             "pname": "/usr/bin/python3.12",
             "uname": "python3",
-            "tid": "68868909270179",
-            "tname": "machine_state_P14SNB436",
+            "tid": "2",
+            "tname": "machine_state_HPC",
             "direction": "subscriber",
             "tdatatype_name": "eCAL.pb.mma.State",
             "tdatatype_encoding": "proto",
@@ -146,12 +142,12 @@
                 {
                     "type": "tl_ecal_udp_mc",
                     "version": 0,
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "tl_ecal_shm",
                     "version": 0,
-                    "active": true
+                    "active": false
                 },
                 {
                     "type": "tl_ecal_tcp",
@@ -159,23 +155,23 @@
                     "active": false
                 }
             ],
-            "tsize": 42645,
+            "tsize": 1247,
             "connections_loc": 0,
             "connections_ext": 0,
-            "message_drops": 3,
+            "message_drops": 0,
             "did": 0,
-            "dclock": 15,
-            "dfreq": 993
+            "dclock": 11,
+            "dfreq": 990
         },
         {
-            "rclock": 16,
-            "hname": "TopicS",
-            "shm_transport_domain": "TopicS",
-            "pid": 408623,
+            "rclock": 12,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 100003,
             "pname": "/usr/bin/python3.12",
             "uname": "python3",
-            "tid": "68868909270177",
-            "tname": "machine_state_TopicS",
+            "tid": "3",
+            "tname": "machine_state_RearLight",
             "direction": "subscriber",
             "tdatatype_name": "eCAL.pb.mma.State",
             "tdatatype_encoding": "proto",
@@ -184,12 +180,12 @@
                 {
                     "type": "tl_ecal_udp_mc",
                     "version": 0,
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "tl_ecal_shm",
                     "version": 0,
-                    "active": true
+                    "active": false
                 },
                 {
                     "type": "tl_ecal_tcp",
@@ -197,369 +193,185 @@
                     "active": false
                 }
             ],
-            "tsize": 82645,
+            "tsize": 1247,
             "connections_loc": 0,
             "connections_ext": 0,
-            "message_drops": 5,
+            "message_drops": 0,
             "did": 0,
-            "dclock": 15,
-            "dfreq": 993
+            "dclock": 11,
+            "dfreq": 990
+        },
+        {
+            "rclock": 15,
+            "hname": "RearLight",
+            "udp_transport_domain": "RearLight",
+            "pid": 200001,
+            "pname": "/usr/bin/ecal_mma-5.13.3",
+            "uname": "Machine Monitoring Agent",
+            "tid": "11",
+            "tname": "machine_state_RearLight",
+            "direction": "publisher",
+            "tdatatype_name": "eCAL.pb.mma.State",
+            "tdatatype_encoding": "proto",
+            "tdatatype_descriptor": "CqgHChllY2FsL2FwcC9wYi9tbWEvbW1hLnByb3RvEgtlQ0FMLnBiLm1tYSJWCgREaXNrEgwKBG5hbWUYASABKAkSDAoEcmVhZBgCIAEoARINCgV3cml0ZRgDIAEoARIRCglhdmFpbGFibGUYBCABKAQSEAoIY2FwYWNpdHkYBSABKAQiSgoHTmV0d29yaxIMCgRuYW1lGAEgASgJEgwKBHNlbmQYAiABKAESDwoHcmVjZWl2ZRgDIAEoARISCgppcF9hZGRyZXNzGAQgASgJIioKBk1lbW9yeRINCgV0b3RhbBgBIAEoBBIRCglhdmFpbGFibGUYAiABKAQiGgoLVGVtcGVyYXR1cmUSCwoDY3B1GAEgASgCIlIKD1Byb2Nlc3Nlc01lbW9yeRIgChhjdXJyZW50X3dvcmtpbmdfc2V0X3NpemUYASABKAQSHQoVcGVha193b3JraW5nX3NldF9zaXplGAIgASgEImsKDFByb2Nlc3Nlc0NQVRIXCg9jcHVfa2VybmVsX3RpbWUYASABKAQSFQoNY3B1X3VzZXJfdGltZRgCIAEoBBIZChFjcHVfY3JlYXRpb25fdGltZRgDIAEoBBIQCghjcHVfbG9hZBgEIAEoAiKwAQoHUHJvY2VzcxIMCgRuYW1lGAEgASgJEgoKAmlkGAIgASgNEhMKC2NvbW1hbmRsaW5lGAMgASgJEiwKBm1lbW9yeRgEIAEoCzIcLmVDQUwucGIubW1hLlByb2Nlc3Nlc01lbW9yeRImCgNjcHUYBSABKAsyGS5lQ0FMLnBiLm1tYS5Qcm9jZXNzZXNDUFUSEgoKZGVidWdfZmxhZxgGIAEoCBIMCgR1c2VyGAcgASgJIpUCCgVTdGF0ZRIQCghjcHVfbG9hZBgBIAEoARIjCgZtZW1vcnkYAiABKAsyEy5lQ0FMLnBiLm1tYS5NZW1vcnkSIAoFZGlza3MYAyADKAsyES5lQ0FMLnBiLm1tYS5EaXNrEiYKCG5ldHdvcmtzGAQgAygLMhQuZUNBTC5wYi5tbWEuTmV0d29yaxItCgt0ZW1wZXJhdHVyZRgFIAEoCzIYLmVDQUwucGIubW1hLlRlbXBlcmF0dXJlEiUKB3Byb2Nlc3MYBiADKAsyFC5lQ0FMLnBiLm1tYS5Qcm9jZXNzEhsKE251bWJlcl9vZl9jcHVfY29yZXMYByABKA0SGAoQb3BlcmF0aW5nX3N5c3RlbRgIIAEoCWIGcHJvdG8z",
+            "layer": [
+                {
+                    "type": "tl_ecal_udp_mc",
+                    "version": 0,
+                    "active": true
+                },
+                {
+                    "type": "tl_ecal_shm",
+                    "version": 0,
+                    "active": false
+                },
+                {
+                    "type": "tl_ecal_tcp",
+                    "version": 0,
+                    "active": false
+                }
+            ],
+            "tsize": 1247,
+            "connections_loc": 1,
+            "connections_ext": 0,
+            "message_drops": 0,
+            "did": 0,
+            "dclock": 17,
+            "dfreq": 990
+        },
+        {
+            "rclock": 12,
+            "hname": "RearLight",
+            "udp_transport_domain": "RearLight",
+            "pid": 200002,
+            "pname": "/usr/bin/python3.12",
+            "uname": "python3",
+            "tid": "12",
+            "tname": "machine_state_RearLight",
+            "direction": "subscriber",
+            "tdatatype_name": "eCAL.pb.mma.State",
+            "tdatatype_encoding": "proto",
+            "tdatatype_descriptor": "CpgHCgltbWEucHJvdG8SC2VDQUwucGIubW1hIlYKBERpc2sSDAoEbmFtZRgBIAEoCRIMCgRyZWFkGAIgASgBEg0KBXdyaXRlGAMgASgBEhEKCWF2YWlsYWJsZRgEIAEoBBIQCghjYXBhY2l0eRgFIAEoBCJKCgdOZXR3b3JrEgwKBG5hbWUYASABKAkSDAoEc2VuZBgCIAEoARIPCgdyZWNlaXZlGAMgASgBEhIKCmlwX2FkZHJlc3MYBCABKAkiKgoGTWVtb3J5Eg0KBXRvdGFsGAEgASgEEhEKCWF2YWlsYWJsZRgCIAEoBCIaCgtUZW1wZXJhdHVyZRILCgNjcHUYASABKAIiUgoPUHJvY2Vzc2VzTWVtb3J5EiAKGGN1cnJlbnRfd29ya2luZ19zZXRfc2l6ZRgBIAEoBBIdChVwZWFrX3dvcmtpbmdfc2V0X3NpemUYAiABKAQiawoMUHJvY2Vzc2VzQ1BVEhcKD2NwdV9rZXJuZWxfdGltZRgBIAEoBBIVCg1jcHVfdXNlcl90aW1lGAIgASgEEhkKEWNwdV9jcmVhdGlvbl90aW1lGAMgASgEEhAKCGNwdV9sb2FkGAQgASgCIrABCgdQcm9jZXNzEgwKBG5hbWUYASABKAkSCgoCaWQYAiABKA0SEwoLY29tbWFuZGxpbmUYAyABKAkSLAoGbWVtb3J5GAQgASgLMhwuZUNBTC5wYi5tbWEuUHJvY2Vzc2VzTWVtb3J5EiYKA2NwdRgFIAEoCzIZLmVDQUwucGIubW1hLlByb2Nlc3Nlc0NQVRISCgpkZWJ1Z19mbGFnGAYgASgIEgwKBHVzZXIYByABKAkilQIKBVN0YXRlEhAKCGNwdV9sb2FkGAEgASgBEiMKBm1lbW9yeRgCIAEoCzITLmVDQUwucGIubW1hLk1lbW9yeRIgCgVkaXNrcxgDIAMoCzIRLmVDQUwucGIubW1hLkRpc2sSJgoIbmV0d29ya3MYBCADKAsyFC5lQ0FMLnBiLm1tYS5OZXR3b3JrEi0KC3RlbXBlcmF0dXJlGAUgASgLMhguZUNBTC5wYi5tbWEuVGVtcGVyYXR1cmUSJQoHcHJvY2VzcxgGIAMoCzIULmVDQUwucGIubW1hLlByb2Nlc3MSGwoTbnVtYmVyX29mX2NwdV9jb3JlcxgHIAEoDRIYChBvcGVyYXRpbmdfc3lzdGVtGAggASgJYgZwcm90bzM=",
+            "layer": [
+                {
+                    "type": "tl_ecal_udp_mc",
+                    "version": 0,
+                    "active": true
+                },
+                {
+                    "type": "tl_ecal_shm",
+                    "version": 0,
+                    "active": false
+                },
+                {
+                    "type": "tl_ecal_tcp",
+                    "version": 0,
+                    "active": false
+                }
+            ],
+            "tsize": 1247,
+            "connections_loc": 0,
+            "connections_ext": 0,
+            "message_drops": 0,
+            "did": 0,
+            "dclock": 11,
+            "dfreq": 990
         }
     ],
     "services": [],
-    "clients": [
-        {
-            "rclock": 1,
-            "hname": "Client",
-            "pname": "/usr/bin/python3.12",
-            "uname": "python3",
-            "pid": 123456,
-            "sname": "Client_SNAME",
-            "sid": "123456",
-            "version": 0
-          },
-          {
-            "rclock": 1,
-            "hname": "Client2",
-            "pname": "/usr/bin/python3.12",
-            "uname": "python3",
-            "pid": 123457,
-            "sname": "Client_SNAME",
-            "sid": "123457",
-            "version": 0
-          }
-    ],
-    "current_processes": [
-        {
-            "rclock": 19,
-            "hname": "P14SNB436",
-            "shm_transport_domain": "P14SNB436",
-            "pid": 408242,
-            "pname": "/usr/bin/ecal_mma-5.13.3",
-            "uname": "Machine Monitoring Agent",
-            "pparam": "ecal_mma-5.13.3",
-            "state_severity": 1,
-            "state_severity_level": 0,
-            "state_info": "Running",
-            "tsync_state": 0,
-            "tsync_mod_name": "",
-            "component_init_state": 129,
-            "component_init_info": "pub",
-            "ecal_runtime_version": "v5.13.3"
-        },
-        {
-            "rclock": 18,
-            "hname": "P14SNB436",
-            "shm_transport_domain": "P14SNB436",
-            "pid": 408621,
-            "pname": "/usr/bin/python3.12",
-            "uname": "python3",
-            "pparam": "python3 monitoring_json.py",
-            "state_severity": 0,
-            "state_severity_level": 1,
-            "state_info": "",
-            "tsync_state": 1,
-            "tsync_mod_name": "ecaltime-localtime",
-            "component_init_state": 63,
-            "component_init_info": "pub|sub|log|time",
-            "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
-        }
-    ],
-    "current_services": [],
-    "current_topics": [],
-    "current_clients": [],
-    "previous_processes": [],
-    "previous_services": [],
-    "previous_topics": [],
-    "previous_clients": [],
-    "process_performances": [
-        [
-            "P14SNB436",
-            {
-                "408242": {
-                    "hname": "P14SNB436",
-                    "pid": 408242,
-                    "current_working_set_size": 9224192,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                },
-                "408621": {
-                    "hname": "P14SNB436",
-                    "pid": 408621,
-                    "current_working_set_size": 56324096,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                }
-            }
-        ],
-        [
-            "TopicP",
-            {
-                "100000": {
-                    "hname": "TopicP",
-                    "pid": 100000,
-                    "current_working_set_size": 9224192,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 5
-                },
-                "100001": {
-                    "hname": "TopicP",
-                    "pid": 100001,
-                    "current_working_set_size": 56324096,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                }
-            }
-        ],
-        [
-            "TopicS",
-            {
-                "408623": {
-                    "hname": "TopicS",
-                    "pid": 408623,
-                    "current_working_set_size": 9224192,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 3
-                }
-            }
-        ],
-        [
-            "Client",
-            {
-                "123456": {
-                    "hname": "Client",
-                    "pid": 123456,
-                    "current_working_set_size": 9224192,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                },
-                "654321": {
-                    "hname": "Client",
-                    "pid": 654321,
-                    "current_working_set_size": 56324096,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                }
-            }
-        ],
-        [
-            "Client2",
-            {
-                "123457": {
-                    "hname": "Client2",
-                    "pid": 123457,
-                    "current_working_set_size": 9224192,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                },
-                "754321": {
-                    "hname": "Client2",
-                    "pid": 754321,
-                    "current_working_set_size": 56324096,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                }
-            }
-        ]
-    ],
-    "dropped_processes": [],
+    "clients": [],
     "hosts": [
         [
-            "P14SNB436",
+            "HPC",
             {
-                "hname": "P14SNB436",
+                "hname": "HPC",
                 "cpu_load": -0.2000000001862734,
-                "total_memory": 33479299072,
-                "available_memory": 32343441408,
-                "capacity_disk": 1026108821504,
-                "available_disk": 1022707445760,
-                "network_send": 66,
-                "network_receive": 66,
+                "total_memory": 90,
+                "available_memory": 100,
+                "capacity_disk": 1000,
+                "available_disk": 950,
+                "network_send": -1,
+                "network_receive": -1,
                 "os": "LINUX Ubuntu 24.04.2 LTS",
                 "num_cpu_cores": 20
             }
         ],
-        
         [
-            "TopicP",
+            "RearLight",
             {
-                "hname": "TopicP",
-                "cpu_load": 500,
-                "total_memory": 33479299072,
-                "available_memory": 32343441408,
-                "capacity_disk": 1026108821504,
-                "available_disk": 1022707445760,
-                "network_send": 66,
-                "network_receive": 66,
+                "hname": "RearLight",
+                "cpu_load": -0.2000000001862734,
+                "total_memory": 90,
+                "available_memory": 100,
+                "capacity_disk": 1000,
+                "available_disk": 950,
+                "network_send": -1,
+                "network_receive": -1,
                 "os": "LINUX Ubuntu 24.04.2 LTS",
                 "num_cpu_cores": 20
             }
         ]
     ],
-    "host_nodes": [
-        {
-            "id": "P14SNB436",
-            "title": "P14SNB436",
-            "subtitle": "",
-            "mainstat": 1,
-            "secondarystat": 0.3,
-            "color": "#EFEEEB",
-            "icon": "",
-            "nodeRadius": 65,
-            "highlighted": "",
-            "arc__ok": 1.0,
-            "arc__nok": 0.0,
-            "detail__hname": "P14SNB436",
-            "detail__cpu": -0.0,
-            "detail__ram": 0.03,
-            "detail__disk": 0.003
-        }
-    ],
-    "host_edges": [],
-    "pub_sub_topic_nodes": [
-        {
-            "id": "68850288734915",
-            "title": "P14SNB436",
-            "subtitle": "",
-            "mainstat": 408242,
-            "secondarystat": "machine_state_P14SNB436",
-            "color": "#EFEEEB",
-            "icon": "",
-            "nodeRadius": 60,
-            "highlighted": "",
-            "arc__cpu_used": 0.0005,
-            "arc__cpu_unused": 0.9995,
-            "detail__pname": "/usr/bin/ecal_mma-5.13.3",
-            "detail__uname": "Machine Monitoring Agent",
-            "detail__dfreq": 993,
-            "detail__tsize": 1247
-        },
-        {
-            "id": "machine_state_P14SNB436",
-            "title": "machine_state_P14SNB436",
-            "subtitle": "",
-            "mainstat": null,
-            "secondarystat": "machine_state_P14SNB436",
-            "color": "#EFEEEB",
-            "icon": "comment-alt",
-            "nodeRadius": 60,
-            "highlighted": "true"
-        },
-        {
-            "id": "68868909270179",
-            "title": "P14SNB436",
-            "subtitle": "",
-            "mainstat": 408621,
-            "secondarystat": "machine_state_P14SNB436",
-            "color": "#EFEEEB",
-            "icon": "",
-            "nodeRadius": 60,
-            "highlighted": "",
-            "arc__cpu_used": 0.0005,
-            "arc__cpu_unused": 0.9995,
-            "detail__pname": "/usr/bin/python3.12",
-            "detail__uname": "python3",
-            "detail__dfreq": 993,
-            "detail__tsize": 1247
-        }
-    ],
-    "pub_sub_topic_edges": [
-        {
-            "id": "68850288734915-machine_state_P14SNB436",
-            "source": "68850288734915",
-            "target": "machine_state_P14SNB436",
-            "mainstat": 0,
-            "secondarystat": "",
-            "thickness": 1,
-            "highlighted": false,
-            "color": "#EFEEEB",
-            "strokeDasharray": ""
-        },
-        {
-            "id": "machine_state_P14SNB436-68868909270179",
-            "source": "machine_state_P14SNB436",
-            "target": "68868909270179",
-            "mainstat": 0,
-            "secondarystat": "",
-            "thickness": 1,
-            "highlighted": false,
-            "color": "#EFEEEB",
-            "strokeDasharray": ""
-        }
-    ],
-    "process_nodes": [
-        {
-            "id": "P14SNB436-408242",
-            "title": "P14SNB436",
-            "subtitle": "",
-            "mainstat": 408242,
-            "secondarystat": "machine_state_P14SNB436",
-            "color": "#EFEEEB",
-            "icon": "",
-            "nodeRadius": 60,
-            "highlighted": "",
-            "arc__cpu_used": 0.0005,
-            "arc__cpu_unused": 0.9995,
-            "detail__pname": "/usr/bin/ecal_mma-5.13.3",
-            "detail__uname": "Machine Monitoring Agent"
-        },
-        {
-            "id": "P14SNB436-408621",
-            "title": "P14SNB436",
-            "subtitle": "",
-            "mainstat": 408621,
-            "secondarystat": "machine_state_P14SNB436",
-            "color": "#EFEEEB",
-            "icon": "",
-            "nodeRadius": 60,
-            "highlighted": "",
-            "arc__cpu_used": 0.0005,
-            "arc__cpu_unused": 0.9995,
-            "detail__pname": "/usr/bin/python3.12",
-            "detail__uname": "python3"
-        }
-    ],
-    "process_edges": [
-        {
-            "id": "P14SNB436-408242-P14SNB436-408621",
-            "source": "P14SNB436-408242",
-            "target": "P14SNB436-408621",
-            "mainstat": "",
-            "secondarystat": "machine_state_P14SNB436",
-            "thickness": 1,
-            "highlighted": false,
-            "color": "#EFEEEB",
-            "strokeDasharray": ""
-        }
-    ],
-    "client_server_nodes": [],
-    "client_server_edges": [],
-    "logs": []
+    "process_performances": [
+        [
+            "HPC",
+            {
+                "100001": {
+                    "hname": "HPC",
+                    "pid": 100001,
+                    "current_working_set_size": 9179136,
+                    "peak_working_set_size": -1,
+                    "cpu_kernel_time": -1,
+                    "cpu_user_time": -1,
+                    "cpu_creation_time": -1,
+                    "cpu_load": -1.0
+                },
+                "100002": {
+                    "hname": "HPC",
+                    "pid": 100002,
+                    "current_working_set_size": 56287232,
+                    "peak_working_set_size": -1,
+                    "cpu_kernel_time": -1,
+                    "cpu_user_time": -1,
+                    "cpu_creation_time": -1,
+                    "cpu_load": 0.05
+                },
+                "100003": {
+                    "hname": "HPC",
+                    "pid": 100003,
+                    "current_working_set_size": 56287232,
+                    "peak_working_set_size": -1,
+                    "cpu_kernel_time": -1,
+                    "cpu_user_time": -1,
+                    "cpu_creation_time": -1,
+                    "cpu_load": 0.05
+                }
+            }
+        ],
+        [
+            "RearLight",
+            {
+                "200001": {
+                    "hname": "RearLight",
+                    "pid": 200001,
+                    "current_working_set_size": 9179136,
+                    "peak_working_set_size": -1,
+                    "cpu_kernel_time": -1,
+                    "cpu_user_time": -1,
+                    "cpu_creation_time": -1,
+                    "cpu_load": -1.0
+                },
+                "200002": {
+                    "hname": "RearLight",
+                    "pid": 200002,
+                    "current_working_set_size": 56287232,
+                    "peak_working_set_size": -1,
+                    "cpu_kernel_time": -1,
+                    "cpu_user_time": -1,
+                    "cpu_creation_time": -1,
+                    "cpu_load": 0.05
+                }
+            }
+        ]
+    ]
 }

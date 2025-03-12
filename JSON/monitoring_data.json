@@ -2,11 +2,11 @@
     "processes": [
         {
             "rclock": 15,
-            "hname": "Dummy1",
-            "shm_transport_domain": "Dummy1",
-            "pid": 100001,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 11,
             "pname": "/usr/bin/ecal_mma-5.13.3",
-            "uname": "Machine Monitoring Agent",
+            "uname": "MMA_HPC",
             "pparam": "ecal_mma-5.13.3",
             "state_severity": 1,
             "state_severity_level": 0,
@@ -19,62 +19,11 @@
         },
         {
             "rclock": 14,
-            "hname": "Dummy1",
-            "shm_transport_domain": "Dummy1",
-            "pid": 100002,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 12,
             "pname": "/usr/bin/python3.12",
-            "uname": "python3",
-            "pparam": "python3 monitoring_json.py",
-            "state_severity": 0,
-            "state_severity_level": 1,
-            "state_info": "",
-            "tsync_state": 1,
-            "tsync_mod_name": "ecaltime-localtime",
-            "component_init_state": 63,
-            "component_init_info": "pub|sub|log|time",
-            "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
-        },
-        {
-            "rclock": 14,
-            "hname": "Dummy1",
-            "shm_transport_domain": "Dummy1",
-            "pid": 100003,
-            "pname": "/usr/bin/python3.12",
-            "uname": "python3",
-            "pparam": "python3 monitoring_json.py",
-            "state_severity": 0,
-            "state_severity_level": 1,
-            "state_info": "",
-            "tsync_state": 1,
-            "tsync_mod_name": "ecaltime-localtime",
-            "component_init_state": 63,
-            "component_init_info": "pub|sub|log|time",
-            "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
-        },
-        {
-            "rclock": 15,
-            "hname": "Dummy2",
-            "shm_transport_domain": "Dummy2",
-            "pid": 200001,
-            "pname": "/usr/bin/ecal_mma-5.13.3",
-            "uname": "Machine Monitoring Agent 2",
-            "pparam": "ecal_mma-5.13.3",
-            "state_severity": 1,
-            "state_severity_level": 0,
-            "state_info": "Running",
-            "tsync_state": 0,
-            "tsync_mod_name": "",
-            "component_init_state": 129,
-            "component_init_info": "pub",
-            "ecal_runtime_version": "v5.13.3"
-        },
-        {
-            "rclock": 14,
-            "hname": "Dummy2",
-            "shm_transport_domain": "Dummy2",
-            "pid": 200002,
-            "pname": "/usr/bin/python3.12",
-            "uname": "python3 2",
+            "uname": "sub_HPC",
             "pparam": "python3 monitoring_json.py",
             "state_severity": 0,
             "state_severity_level": 1,
@@ -89,127 +38,13 @@
     "topics": [
         {
             "rclock": 15,
-            "hname": "Dummy1",
-            "shm_transport_domain": "Dummy1",
-            "pid": 100001,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 11,
             "pname": "/usr/bin/ecal_mma-5.13.3",
-            "uname": "Machine Monitoring Agent",
-            "tid": "1",
-            "tname": "machine_state_Dummy1",
-            "direction": "publisher",
-            "tdatatype_name": "eCAL.pb.mma.State",
-            "tdatatype_encoding": "proto",
-            "tdatatype_descriptor": "CqgHChllY2FsL2FwcC9wYi9tbWEvbW1hLnByb3RvEgtlQ0FMLnBiLm1tYSJWCgREaXNrEgwKBG5hbWUYASABKAkSDAoEcmVhZBgCIAEoARINCgV3cml0ZRgDIAEoARIRCglhdmFpbGFibGUYBCABKAQSEAoIY2FwYWNpdHkYBSABKAQiSgoHTmV0d29yaxIMCgRuYW1lGAEgASgJEgwKBHNlbmQYAiABKAESDwoHcmVjZWl2ZRgDIAEoARISCgppcF9hZGRyZXNzGAQgASgJIioKBk1lbW9yeRINCgV0b3RhbBgBIAEoBBIRCglhdmFpbGFibGUYAiABKAQiGgoLVGVtcGVyYXR1cmUSCwoDY3B1GAEgASgCIlIKD1Byb2Nlc3Nlc01lbW9yeRIgChhjdXJyZW50X3dvcmtpbmdfc2V0X3NpemUYASABKAQSHQoVcGVha193b3JraW5nX3NldF9zaXplGAIgASgEImsKDFByb2Nlc3Nlc0NQVRIXCg9jcHVfa2VybmVsX3RpbWUYASABKAQSFQoNY3B1X3VzZXJfdGltZRgCIAEoBBIZChFjcHVfY3JlYXRpb25fdGltZRgDIAEoBBIQCghjcHVfbG9hZBgEIAEoAiKwAQoHUHJvY2VzcxIMCgRuYW1lGAEgASgJEgoKAmlkGAIgASgNEhMKC2NvbW1hbmRsaW5lGAMgASgJEiwKBm1lbW9yeRgEIAEoCzIcLmVDQUwucGIubW1hLlByb2Nlc3Nlc01lbW9yeRImCgNjcHUYBSABKAsyGS5lQ0FMLnBiLm1tYS5Qcm9jZXNzZXNDUFUSEgoKZGVidWdfZmxhZxgGIAEoCBIMCgR1c2VyGAcgASgJIpUCCgVTdGF0ZRIQCghjcHVfbG9hZBgBIAEoARIjCgZtZW1vcnkYAiABKAsyEy5lQ0FMLnBiLm1tYS5NZW1vcnkSIAoFZGlza3MYAyADKAsyES5lQ0FMLnBiLm1tYS5EaXNrEiYKCG5ldHdvcmtzGAQgAygLMhQuZUNBTC5wYi5tbWEuTmV0d29yaxItCgt0ZW1wZXJhdHVyZRgFIAEoCzIYLmVDQUwucGIubW1hLlRlbXBlcmF0dXJlEiUKB3Byb2Nlc3MYBiADKAsyFC5lQ0FMLnBiLm1tYS5Qcm9jZXNzEhsKE251bWJlcl9vZl9jcHVfY29yZXMYByABKA0SGAoQb3BlcmF0aW5nX3N5c3RlbRgIIAEoCWIGcHJvdG8z",
-            "layer": [
-                {
-                    "type": "tl_ecal_udp_mc",
-                    "version": 0,
-                    "active": false
-                },
-                {
-                    "type": "tl_ecal_shm",
-                    "version": 0,
-                    "active": true
-                },
-                {
-                    "type": "tl_ecal_tcp",
-                    "version": 0,
-                    "active": false
-                }
-            ],
-            "tsize": 1247,
-            "connections_loc": 1,
-            "connections_ext": 0,
-            "message_drops": 0,
-            "did": 0,
-            "dclock": 17,
-            "dfreq": 990
-        },
-        {
-            "rclock": 12,
-            "hname": "Dummy1",
-            "shm_transport_domain": "Dummy1",
-            "pid": 100002,
-            "pname": "/usr/bin/python3.12",
-            "uname": "python3",
-            "tid": "2",
-            "tname": "machine_state_Dummy1",
-            "direction": "subscriber",
-            "tdatatype_name": "eCAL.pb.mma.State",
-            "tdatatype_encoding": "proto",
-            "tdatatype_descriptor": "CpgHCgltbWEucHJvdG8SC2VDQUwucGIubW1hIlYKBERpc2sSDAoEbmFtZRgBIAEoCRIMCgRyZWFkGAIgASgBEg0KBXdyaXRlGAMgASgBEhEKCWF2YWlsYWJsZRgEIAEoBBIQCghjYXBhY2l0eRgFIAEoBCJKCgdOZXR3b3JrEgwKBG5hbWUYASABKAkSDAoEc2VuZBgCIAEoARIPCgdyZWNlaXZlGAMgASgBEhIKCmlwX2FkZHJlc3MYBCABKAkiKgoGTWVtb3J5Eg0KBXRvdGFsGAEgASgEEhEKCWF2YWlsYWJsZRgCIAEoBCIaCgtUZW1wZXJhdHVyZRILCgNjcHUYASABKAIiUgoPUHJvY2Vzc2VzTWVtb3J5EiAKGGN1cnJlbnRfd29ya2luZ19zZXRfc2l6ZRgBIAEoBBIdChVwZWFrX3dvcmtpbmdfc2V0X3NpemUYAiABKAQiawoMUHJvY2Vzc2VzQ1BVEhcKD2NwdV9rZXJuZWxfdGltZRgBIAEoBBIVCg1jcHVfdXNlcl90aW1lGAIgASgEEhkKEWNwdV9jcmVhdGlvbl90aW1lGAMgASgEEhAKCGNwdV9sb2FkGAQgASgCIrABCgdQcm9jZXNzEgwKBG5hbWUYASABKAkSCgoCaWQYAiABKA0SEwoLY29tbWFuZGxpbmUYAyABKAkSLAoGbWVtb3J5GAQgASgLMhwuZUNBTC5wYi5tbWEuUHJvY2Vzc2VzTWVtb3J5EiYKA2NwdRgFIAEoCzIZLmVDQUwucGIubW1hLlByb2Nlc3Nlc0NQVRISCgpkZWJ1Z19mbGFnGAYgASgIEgwKBHVzZXIYByABKAkilQIKBVN0YXRlEhAKCGNwdV9sb2FkGAEgASgBEiMKBm1lbW9yeRgCIAEoCzITLmVDQUwucGIubW1hLk1lbW9yeRIgCgVkaXNrcxgDIAMoCzIRLmVDQUwucGIubW1hLkRpc2sSJgoIbmV0d29ya3MYBCADKAsyFC5lQ0FMLnBiLm1tYS5OZXR3b3JrEi0KC3RlbXBlcmF0dXJlGAUgASgLMhguZUNBTC5wYi5tbWEuVGVtcGVyYXR1cmUSJQoHcHJvY2VzcxgGIAMoCzIULmVDQUwucGIubW1hLlByb2Nlc3MSGwoTbnVtYmVyX29mX2NwdV9jb3JlcxgHIAEoDRIYChBvcGVyYXRpbmdfc3lzdGVtGAggASgJYgZwcm90bzM=",
-            "layer": [
-                {
-                    "type": "tl_ecal_udp_mc",
-                    "version": 0,
-                    "active": false
-                },
-                {
-                    "type": "tl_ecal_shm",
-                    "version": 0,
-                    "active": true
-                },
-                {
-                    "type": "tl_ecal_tcp",
-                    "version": 0,
-                    "active": false
-                }
-            ],
-            "tsize": 1247,
-            "connections_loc": 0,
-            "connections_ext": 0,
-            "message_drops": 0,
-            "did": 0,
-            "dclock": 11,
-            "dfreq": 990
-        },
-        {
-            "rclock": 12,
-            "hname": "Dummy1",
-            "shm_transport_domain": "Dummy1",
-            "pid": 100003,
-            "pname": "/usr/bin/python3.12",
-            "uname": "python3",
-            "tid": "3",
-            "tname": "machine_state_Dummy1",
-            "direction": "subscriber",
-            "tdatatype_name": "eCAL.pb.mma.State",
-            "tdatatype_encoding": "proto",
-            "tdatatype_descriptor": "CpgHCgltbWEucHJvdG8SC2VDQUwucGIubW1hIlYKBERpc2sSDAoEbmFtZRgBIAEoCRIMCgRyZWFkGAIgASgBEg0KBXdyaXRlGAMgASgBEhEKCWF2YWlsYWJsZRgEIAEoBBIQCghjYXBhY2l0eRgFIAEoBCJKCgdOZXR3b3JrEgwKBG5hbWUYASABKAkSDAoEc2VuZBgCIAEoARIPCgdyZWNlaXZlGAMgASgBEhIKCmlwX2FkZHJlc3MYBCABKAkiKgoGTWVtb3J5Eg0KBXRvdGFsGAEgASgEEhEKCWF2YWlsYWJsZRgCIAEoBCIaCgtUZW1wZXJhdHVyZRILCgNjcHUYASABKAIiUgoPUHJvY2Vzc2VzTWVtb3J5EiAKGGN1cnJlbnRfd29ya2luZ19zZXRfc2l6ZRgBIAEoBBIdChVwZWFrX3dvcmtpbmdfc2V0X3NpemUYAiABKAQiawoMUHJvY2Vzc2VzQ1BVEhcKD2NwdV9rZXJuZWxfdGltZRgBIAEoBBIVCg1jcHVfdXNlcl90aW1lGAIgASgEEhkKEWNwdV9jcmVhdGlvbl90aW1lGAMgASgEEhAKCGNwdV9sb2FkGAQgASgCIrABCgdQcm9jZXNzEgwKBG5hbWUYASABKAkSCgoCaWQYAiABKA0SEwoLY29tbWFuZGxpbmUYAyABKAkSLAoGbWVtb3J5GAQgASgLMhwuZUNBTC5wYi5tbWEuUHJvY2Vzc2VzTWVtb3J5EiYKA2NwdRgFIAEoCzIZLmVDQUwucGIubW1hLlByb2Nlc3Nlc0NQVRISCgpkZWJ1Z19mbGFnGAYgASgIEgwKBHVzZXIYByABKAkilQIKBVN0YXRlEhAKCGNwdV9sb2FkGAEgASgBEiMKBm1lbW9yeRgCIAEoCzITLmVDQUwucGIubW1hLk1lbW9yeRIgCgVkaXNrcxgDIAMoCzIRLmVDQUwucGIubW1hLkRpc2sSJgoIbmV0d29ya3MYBCADKAsyFC5lQ0FMLnBiLm1tYS5OZXR3b3JrEi0KC3RlbXBlcmF0dXJlGAUgASgLMhguZUNBTC5wYi5tbWEuVGVtcGVyYXR1cmUSJQoHcHJvY2VzcxgGIAMoCzIULmVDQUwucGIubW1hLlByb2Nlc3MSGwoTbnVtYmVyX29mX2NwdV9jb3JlcxgHIAEoDRIYChBvcGVyYXRpbmdfc3lzdGVtGAggASgJYgZwcm90bzM=",
-            "layer": [
-                {
-                    "type": "tl_ecal_udp_mc",
-                    "version": 0,
-                    "active": false
-                },
-                {
-                    "type": "tl_ecal_shm",
-                    "version": 0,
-                    "active": true
-                },
-                {
-                    "type": "tl_ecal_tcp",
-                    "version": 0,
-                    "active": false
-                }
-            ],
-            "tsize": 1247,
-            "connections_loc": 0,
-            "connections_ext": 0,
-            "message_drops": 0,
-            "did": 0,
-            "dclock": 11,
-            "dfreq": 990
-        },
-        {
-            "rclock": 15,
-            "hname": "Dummy2",
-            "shm_transport_domain": "Dummy2",
-            "pid": 200001,
-            "pname": "/usr/bin/ecal_mma-5.13.3",
-            "uname": "Machine Monitoring Agent",
+            "uname": "MMA_HPC",
             "tid": "11",
-            "tname": "machine_state_Dummy2",
+            "tname": "ms_HPC",
             "direction": "publisher",
             "tdatatype_name": "eCAL.pb.mma.State",
             "tdatatype_encoding": "proto",
@@ -218,12 +53,12 @@
                 {
                     "type": "tl_ecal_udp_mc",
                     "version": 0,
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "tl_ecal_shm",
                     "version": 0,
-                    "active": true
+                    "active": false
                 },
                 {
                     "type": "tl_ecal_tcp",
@@ -231,23 +66,23 @@
                     "active": false
                 }
             ],
-            "tsize": 1247,
+            "tsize": 1000,
             "connections_loc": 1,
             "connections_ext": 0,
             "message_drops": 0,
             "did": 0,
             "dclock": 17,
-            "dfreq": 990
+            "dfreq": 1000
         },
         {
             "rclock": 12,
-            "hname": "Dummy2",
-            "shm_transport_domain": "Dummy2",
-            "pid": 200002,
+            "hname": "HPC",
+            "udp_transport_domain": "HPC",
+            "pid": 12,
             "pname": "/usr/bin/python3.12",
-            "uname": "python3",
+            "uname": "sub_HPC",
             "tid": "12",
-            "tname": "machine_state_Dummy2",
+            "tname": "ms_HPC",
             "direction": "subscriber",
             "tdatatype_name": "eCAL.pb.mma.State",
             "tdatatype_encoding": "proto",
@@ -256,12 +91,12 @@
                 {
                     "type": "tl_ecal_udp_mc",
                     "version": 0,
-                    "active": false
+                    "active": true
                 },
                 {
                     "type": "tl_ecal_shm",
                     "version": 0,
-                    "active": true
+                    "active": false
                 },
                 {
                     "type": "tl_ecal_tcp",
@@ -269,42 +104,27 @@
                     "active": false
                 }
             ],
-            "tsize": 1247,
+            "tsize": 1000,
             "connections_loc": 0,
             "connections_ext": 0,
             "message_drops": 0,
             "did": 0,
             "dclock": 11,
-            "dfreq": 990
+            "dfreq": 1000
         }
     ],
     "services": [],
     "clients": [],
     "hosts": [
         [
-            "Dummy1",
+            "HPC",
             {
-                "hname": "Dummy1",
-                "cpu_load": -0.2000000001862734,
-                "total_memory": 90,
+                "hname": "HPC",
+                "cpu_load": 10,
+                "total_memory": 100,
                 "available_memory": 100,
-                "capacity_disk": 1000,
-                "available_disk": 950,
-                "network_send": -1,
-                "network_receive": -1,
-                "os": "LINUX Ubuntu 24.04.2 LTS",
-                "num_cpu_cores": 20
-            }
-        ],
-        [
-            "Dummy2",
-            {
-                "hname": "Dummy2",
-                "cpu_load": -0.2000000001862734,
-                "total_memory": 90,
-                "available_memory": 100,
-                "capacity_disk": 1000,
-                "available_disk": 950,
+                "capacity_disk": 100,
+                "available_disk": 100,
                 "network_send": -1,
                 "network_receive": -1,
                 "os": "LINUX Ubuntu 24.04.2 LTS",
@@ -314,56 +134,21 @@
     ],
     "process_performances": [
         [
-            "Dummy1",
+            "HPC",
             {
-                "100001": {
-                    "hname": "Dummy1",
-                    "pid": 100001,
+                "11": {
+                    "hname": "HPC",
+                    "pid": 11,
                     "current_working_set_size": 9179136,
                     "peak_working_set_size": -1,
                     "cpu_kernel_time": -1,
                     "cpu_user_time": -1,
                     "cpu_creation_time": -1,
-                    "cpu_load": -1.0
+                    "cpu_load": 0
                 },
-                "100002": {
-                    "hname": "Dummy1",
-                    "pid": 100002,
-                    "current_working_set_size": 56287232,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                },
-                "100003": {
-                    "hname": "Dummy1",
-                    "pid": 100003,
-                    "current_working_set_size": 56287232,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": 0.05
-                }
-            }
-        ],
-        [
-            "Dummy2",
-            {
-                "200001": {
-                    "hname": "Dummy2",
-                    "pid": 200001,
-                    "current_working_set_size": 9179136,
-                    "peak_working_set_size": -1,
-                    "cpu_kernel_time": -1,
-                    "cpu_user_time": -1,
-                    "cpu_creation_time": -1,
-                    "cpu_load": -1.0
-                },
-                "200002": {
-                    "hname": "Dummy2",
-                    "pid": 200002,
+                "12": {
+                    "hname": "HPC",
+                    "pid": 12,
                     "current_working_set_size": 56287232,
                     "peak_working_set_size": -1,
                     "cpu_kernel_time": -1,

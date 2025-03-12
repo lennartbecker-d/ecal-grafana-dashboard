@@ -359,25 +359,7 @@ class Monitor:
             "topics": monitoring["topics"],
             "services": monitoring["services"],
             "clients": monitoring["clients"],
-            # "current_processes": list(self.processes.values()),
-            # "current_services": list(self.services.values()),
-            # "current_topics": list(self.topics.values()),
-            # "current_clients": list(self.clients.values()),
-            # "previous_processes": list(self.previous_processes.values()),
-            # "previous_services": list(self.previous_services.values()),
-            # "previous_topics": list(self.previous_topics.values()),
-            # "previous_clients": list(self.previous_clients.values()),
-            # "dropped_processes": list(self.dropped_processes.items()),
             "hosts": list(self.hosts.items()),
-            # "host_nodes": list(self.host_nodes.values()),
-            # "host_edges": list(self.host_edges.values()),
-            # "pub_sub_topic_nodes": list(self.pub_sub_topic_nodes.values()),
-            # "pub_sub_topic_edges": list(self.pub_sub_topic_edges.values()),
-            # "process_nodes": list(self.process_nodes.values()),
-            # "process_edges": list(self.process_edges.values()),
-            # "client_server_nodes": list(self.client_server_nodes.values()),
-            # "client_server_edges": list(self.client_server_edges.values()),
-            # "logs": list(self.logs),
             "process_performances": list(self.process_performances.items())
         }
         with open('JSON/monitoring_data.json', 'w') as json_file:
@@ -391,40 +373,21 @@ class Monitor:
             services = data["services"]
             topics = data["topics"]
             clients = data["clients"] 
-            # {
-            #     hname: {int(sid): client for sid, client in client_dict.items()}
-            #     for hname, client_dict in data["clients"]
-            # }
-            # self.previous_processes = data["previous_processes"]
-            # self.previous_services = data["previous_services"]
-            # self.previous_topics = data["previous_topics"]
-            # self.previous_clients = data["previous_clients"]
             self.process_performances = {
                 hname: {int(pid): performance for pid, performance in performance_dict.items()}
                 for hname, performance_dict in data["process_performances"]
             }
-            # self.dropped_processes = dict(data["dropped_processes"])
             self.hosts = dict(data["hosts"])
-            # self.host_nodes = data["host_nodes"]
-            # self.host_edges = data["host_edges"]
-            # self.pub_sub_topic_nodes = data["pub_sub_topic_nodes"]
-            # self.pub_sub_topic_edges = data["pub_sub_topic_edges"]
-            # self.process_nodes = data["process_nodes"]
-            # self.process_edges = data["process_edges"]
-            # self.client_server_nodes = data["client_server_nodes"]
-            # self.client_server_edges = data["client_server_edges"]
-            # self.logs = data["logs"]
             return {"processes": processes, "services": services, "topics": topics, "clients": clients, "process_performances": self.process_performances, "hosts": self.hosts}
 
     def update_monitor(self, ecal_data):
         # monitoring_d = convert_bytes_to_str(ecal_data, handle_bytes="decode")
         # monitoring = monitoring_d[1]
-        # with open('monitoring_data.json', 'r') as json_file:
-        #     monitoring = json.load(json_file)
-        # monitoring = self.read_from_json()
+        
         monitoring = ecal_data
         self.hosts = ecal_data.get("hosts", {})
         self.process_performances = ecal_data.get("process_performances", {})     
+        
         
         self.update_processes(monitoring["processes"])
         self.update_topics(monitoring["topics"])

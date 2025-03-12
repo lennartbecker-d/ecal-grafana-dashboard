@@ -120,7 +120,6 @@ def create_node(
 
 
 def get_arc_cpu(process_performances, hname, pid):
-    # print(process_performances)
     if process_performances:
         cpu_load = process_performances[hname][pid]["cpu_load"]
         if cpu_load == -1:
@@ -192,7 +191,7 @@ def create_host_graph(topics, host_dict):
                     source=pub["hname"],
                     target=sub["hname"],
                     mainstat=pub["throughput"],
-                    secondarystat="",
+                    secondarystat="0",
                     thickness=1,
                     color="#EFEEEB",
                 )
@@ -273,7 +272,6 @@ def create_process_graph(topics, process_performances):
 def create_pub_sub_topic_graph(topics, process_performances):
     edge_dict = {}
     node_dict = {}
-
     for t in topics:
         details = {
             "detail__pname": t["pname"],
