@@ -27,7 +27,6 @@ def main(interval, verbose, db_path):
     script_thread.start()
     
     while ecal_core.ok():
-        # print(manipulate_data.return_data().get("topics", {}))
         monitor.update_monitor(manipulate_data.return_data())
         # monitor.update_monitor(monitor.read_from_json())    
         # monitor.update_monitor(ecal_data=ecal_core.mon_monitoring())
