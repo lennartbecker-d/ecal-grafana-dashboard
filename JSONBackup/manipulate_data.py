@@ -1,6 +1,7 @@
 from collections import defaultdict
 import copy
 import time
+import threading
 import random
 
 class ManipulateData:
@@ -16,7 +17,7 @@ class ManipulateData:
         self.process_performances = self.ecal_data.get("process_performances", {})     
     
     def reset(self):
-        print("Reset data")
+        print("reset data")
         self.ecal_data = copy.deepcopy(self.ecal_raw_data)
         self.processes = self.ecal_data.get("processes", {})
         self.services = self.ecal_data.get("services", {})
@@ -49,18 +50,18 @@ class ManipulateData:
                 topic['message_drops'] = new_value
                 # print(f"message_drops for {identifier} increased to {topic['message_drops']}")
 
-    def increase_state_severity(self, identifier, magnitude):
+    def set_state_severity(self, identifier, magnitude):
         for process in self.processes:
             if process['hname'] == identifier or process['pid'] == identifier:
-                new_value = max(0, process['state_severity'] + magnitude)
-                process['state_severity'] = new_value
+                # new_value = max(0, process['state_severity'] + magnitude)
+                process['state_severity'] = magnitude
                 # print(f"state_severity for {identifier} increased to {process['state_severity']}")
 
-    def increase_state_severity_level(self, identifier, magnitude):
+    def set_state_severity_level(self, identifier, magnitude):
         for process in self.processes:
             if process['hname'] == identifier or process['pid'] == identifier:
-                new_value = max(0, process['state_severity_level'] + magnitude)
-                process['state_severity_level'] = new_value
+                # new_value = max(0, process['state_severity_level'] + magnitude)
+                process['state_severity_level'] = magnitude
                 # print(f"state_severity_level for {identifier} increased to {process['state_severity_level']}")
 
     
@@ -133,7 +134,7 @@ class ManipulateData:
         }
         self.topics.append(new_topic)
         if pid not in self.process_performances:
-            self.update_process_performance(hname, pid, 0.05)   # default CPU load
+            self.update_process_performance(hname, pid, 0)   # default CPU load
     
     def delete_topic(self, tid):
         # print("Delete topic")
@@ -156,7 +157,7 @@ class ManipulateData:
             
         existing_performance = self.process_performances[hname].get(pid)
         if existing_performance:
-            existing_performance['cpu_load'] = cpu_load
+            existing_performance['cpu_load'] += cpu_load
             # print(f"Updated cpu_load for hname={hname}, pid={pid}: {cpu_load}")
         else:
             self.process_performances[hname][pid] = process_performance
@@ -195,75 +196,414 @@ class ManipulateData:
         del self.hosts[hname] 
         # print(f"Host '{hname}' has been removed.")
         self.ecal_data["hosts"] = self.hosts 
-                
-    def run_script(self):
-        print("Running script...")
-        self.reset()
-        
-        # time.sleep(5)
-        self.add_host("RearLight", 0, 100, 100, 100, 100)
-        self.add_process("RearLight", 21, "MMA_RearLight", 1, 0, "udp")
-        # self.add_process("RearLight", 22, "sub_RearLight", 0, 1, "udp")
-        self.add_process("RearLight", 23, "sub_RearLight", 0, 1, "udp")
-        self.add_topic("RearLight", "ms_RearLight", 21, "MMA_RearLight", "21", "publisher", 1000, 1000, "udp")
-        # self.add_topic("RearLight", "ms_RearLight", 22, "sub_RearLight", "22", "subscriber", 1000, 1000, "udp")
-        self.add_topic("RearLight", "ms_HPC", 23, "sub_RearLight", "23", "subscriber", 1000, 1000, "udp")
-        
-        # time.sleep(5)
-        
-        self.add_host("Brakes", 0, 100, 100, 100, 100)
-        self.add_process("Brakes", 31, "MMA_Brakes", 1, 0, "udp")
-        # self.add_process("Brakes", 32, "sub_Brakes", 0, 1, "udp")
-        self.add_process("Brakes", 33, "sub_Brakes", 0, 1, "udp")
-        self.add_topic("Brakes", "ms_Brakes", 31, "MMA_Brakes", "31", "publisher", 1000, 1000, "udp")
-        # self.add_topic("Brakes", "ms_Brakes", 32, "sub_Brakes", "32", "subscriber", 1000, 1000, "udp")
-        self.add_topic("Brakes", "ms_HPC", 33, "sub_Brakes", "33", "subscriber", 1000, 1000, "udp")
-        
-        
-        # time.sleep(5)
-               
-        self.add_process("HPC", 13, "sub_HPC", 0, 1, "udp")
-        self.add_process("HPC", 14, "sub_HPC", 0, 1, "udp")
-        self.add_topic("HPC", "ms_RearLight", 13, "sub_HPC", "13", "subscriber", 1000, 1000, "udp")
-        self.add_topic("HPC", "ms_Brakes", 14, "sub_HPC", "14", "subscriber", 1000, 1000, "udp")
-        
-        
-        for i in range(5):
-            time.sleep(5)
-            val = 100 - 2*i
-            self.increase_tsize(21, 500)
-            self.increase_state_severity(21, 1)
-            self.change_host_cpu_load("HPC", 20)
-            self.add_host("HPC", 50+10*i, 100, val, 100, val-10)
-            self.increase_message_drops(33, i)
-            self.update_process_performance("RearLight", 33, 50+5*i)
-            self.update_process_performance("RearLight", 23, 20+5*i)
-            self.update_process_performance("HPC", 13, 30+15*i)
-        
-        time.sleep(5)
-        self.delete_topic("33")
-        self.delete_topic("23")
-        # self.delete_process_performance(33)
-        time.sleep(5)
-        
-        
-        
-        # Schleife mit der zufällige Message Drops erzeugt werden
-        # for _ in range(20):
-        #     random_message_drops = random.randint(-20, 50)
-        #     pid_list = [topic["pid"] for topic in self.topics if topic["direction"] == "subscriber"]
-        #     pid = random.choice(pid_list)
-        #     self.increase_message_drops(pid, random_message_drops)
-        #     time.sleep(2)
-                    
-        
-        
-        # Schleife mit der weitere HPC publisher erzeugt werden
-        # for id in range(15, 19):  
-        #     self.add_process("HPC", id, "MMA_HPC "+ str(id), 0, 1)
-        #     self.add_topic("HPC", "ms_HPC", id, "MMA_HPC " + str(id), str(id), "publisher", 1000, 1000)
-        
-        time.sleep(1)
 
-        print("Script finished.")
+
+
+###########################################################################################################################################
+#                                                           INITIAL SETUP
+###########################################################################################################################################                
+    def initial_setup(self):
+        # --- Add Hosts ---
+        # HPC: Host where the central lighting controller and the faulty overload process run.
+        self.add_host(
+            hname="HPC",
+            cpu_load=0,
+            total_memory=100,
+            available_memory=100,
+            capacity_disk=100,
+            available_disk=100
+        )
+
+        # Brakes: Host representing the brakes, sending brake status.
+        self.add_host(
+            hname="Brakes",
+            cpu_load=0,
+            total_memory=100,
+            available_memory=100,
+            capacity_disk=100,
+            available_disk=100
+        )
+
+        # TailLight: Host for the tail light controller that subscribes to lighting commands.
+        self.add_host(
+            hname="TailLight",
+            cpu_load=0,
+            total_memory=100,
+            available_memory=100,
+            capacity_disk=100,
+            available_disk=100
+        )
+
+        # --- Add Processes ---
+        # HPC - Central Lighting Controller process (publishes lighting commands).
+        self.add_process(
+            hname="HPC",
+            pid=11,
+            uname="TailLightController",
+            state_severity=1,
+            state_severity_level=1,
+            layer="udp"
+        )
+        
+        # HPC - Overload Logger process (simulates a process that becomes overloaded and logs errors).
+        self.add_process(
+            hname="HPC",
+            pid=12,
+            uname="OverloadLogger",
+            state_severity=1,
+            state_severity_level=1,
+            layer="udp"
+        )
+        
+        # Brakes - Brake Sensor (publishes brake status data).
+        self.add_process(
+            hname="Brakes",
+            pid=21,
+            uname="BrakeSensor",
+            state_severity=1,
+            state_severity_level=1,
+            layer="udp"
+        )
+        
+        # TailLight - Tail Light Controller (subscribes to lighting commands).
+        self.add_process(
+            hname="TailLight",
+            pid=32,
+            uname="TailLightController",
+            state_severity=1,
+            state_severity_level=1,
+            layer="udp"
+        )
+        
+        # --- Add Topics ---
+        # LightingCommand topic published by TailLightController (HPC).
+        self.add_topic(
+            hname="HPC",
+            tname="LightingCommand",
+            pid=11,
+            uname="TailLightController",
+            tid="T100",
+            direction="publisher",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+        
+        # ErrorLogs topic published by the OverloadLogger (HPC).
+        self.add_topic(
+            hname="HPC",
+            tname="ErrorLogs",
+            pid=12,
+            uname="OverloadLogger",
+            tid="T300",
+            direction="publisher",
+            tsize=0,
+            dfreq=1000,
+            layer="shm"
+        )
+        
+        # BrakeState topic published by BrakeSensor (Brakes).
+        self.add_topic(
+            hname="Brakes",
+            tname="BrakeState",
+            pid=21,
+            uname="BrakeSensor",
+            tid="T200",
+            direction="publisher",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+        
+        # Publisher for LightingCommand on TailLight: Tail Light Controller sends lighting inquiries.
+        self.add_topic(
+            hname="TailLight",
+            tname="TailLightState",
+            pid=31,
+            uname="TailLightController",
+            tid="T400",
+            direction="publisher",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+        
+        # ErrorLogs topic subscribed by the OverloadLogger (HPC).
+        self.add_topic(
+            hname="HPC",
+            tname="ErrorLogs",
+            pid=13,
+            uname="OverloadLogger",
+            tid="T300_sub",
+            direction="subscriber",
+            tsize=0,
+            dfreq=1000,
+            layer="shm"
+        )
+        
+        # Subscriber for BrakeState on HPC: Central process or a dedicated subscriber to receive brake sensor data.
+        self.add_topic(
+            hname="TailLight",
+            tname="BrakeState",
+            pid=33,
+            uname="TailLightBrakeSubscriber",
+            tid="T200_sub",
+            direction="subscriber",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+        
+        # Subscriber for BrakeState on HPC: Central process or a dedicated subscriber to receive brake sensor data.
+        self.add_topic(
+            hname="HPC",
+            tname="TailLightState",
+            pid=15,
+            uname="TailLightController",
+            tid="T400_sub",
+            direction="subscriber",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+        
+        # Subscriber for LightingCommand on TailLight: Tail Light Controller receives lighting commands.
+        self.add_topic(
+            hname="TailLight",
+            tname="LightingCommand",
+            pid=32,
+            uname="TailLightController",
+            tid="T100_sub",
+            direction="subscriber",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+
+###########################################################################################################################################
+#                                                           RUN SCRIPT
+###########################################################################################################################################
+    def add_overloading_process(self):
+        # Subscriber for BrakeState on HPC: Central process or a dedicated subscriber to receive brake sensor data.
+        self.add_topic(
+            hname="HPC",
+            tname="CameraState",
+            pid=16,
+            uname="CameraProcess",
+            tid="T500_sub",
+            direction="subscriber",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+        
+    # Publisher for Camera Process
+        self.add_topic(
+            hname="Camera",
+            tname="CameraState",
+            pid=41,
+            uname="CameraProcess",
+            tid="T500",
+            direction="publisher",
+            tsize=0,
+            dfreq=1000,
+            layer="udp"
+        )
+    
+    # Brakes
+    
+    def send_brake_state_ok(self):
+        for _ in range(24):
+            self.increase_tsize(21, 1000)
+            self.increase_tsize(33, 1000)
+            self.update_process_performance("Brakes", 21, 10)
+            self.update_process_performance("TailLight", 33, 5)
+            # self.set_state_severity(21,1)
+            self.set_state_severity_level(33,1)
+            time.sleep(5)
+            self.increase_tsize(21, -1000)
+            self.increase_tsize(33, -1000)
+            self.update_process_performance("Brakes", 21, -10)
+            self.update_process_performance("TailLight", 33, -5)
+            # self.set_state_severity(21,0)
+            self.set_state_severity_level(33,0)
+        self.send_brake_state_false()
+    
+    def send_brake_state_false(self):
+        self.increase_tsize(21, 1000)
+        self.increase_tsize(12, 1000)
+        self.increase_tsize(13, 1000)
+        self.update_process_performance("Brakes", 21, 10)
+        self.update_process_performance("HPC", 12, 10)
+        self.update_process_performance("HPC", 13, 10)
+        self.set_state_severity(21,2)
+        self.set_state_severity_level("HPC",2)
+        time.sleep(20)
+        self.increase_tsize(21, -1000)
+        self.increase_tsize(12, -1000)
+        self.increase_tsize(13, -1000)
+        self.update_process_performance("Brakes", 21, -10)
+        self.update_process_performance("HPC", 12, -10)
+        self.update_process_performance("HPC", 13, -10)
+        self.set_state_severity(21,0)
+        self.set_state_severity_level("HPC",0)
+        
+    # Tail light
+    
+    def send_tail_light_state_ok(self):
+        for _ in range(40):
+            self.increase_tsize(31, 2000)
+            self.increase_tsize(15, 2000)
+            self.update_process_performance("TailLight", 31, 20)
+            self.update_process_performance("HPC", 15, 5)
+            # self.set_state_severity(31,1)
+            self.set_state_severity_level(15,1)
+            time.sleep(3)
+            self.increase_tsize(31, -2000)
+            self.increase_tsize(15, -2000)
+            self.update_process_performance("TailLight", 31, -20)
+            self.update_process_performance("HPC", 15, -5)
+            # self.set_state_severity(31,0)
+            self.set_state_severity_level(15,0)
+        self.send_tail_light_state_false()
+        
+        
+    def send_tail_light_state_false(self):
+        self.increase_tsize(31, 2000)
+        self.increase_tsize(12, 2000)
+        self.increase_tsize(13, 2000)
+        self.update_process_performance("TailLight", 31, 20)
+        self.update_process_performance("HPC", 12, 15)
+        self.update_process_performance("HPC", 13, 15)
+        self.set_state_severity(31,2)
+        self.set_state_severity_level("HPC",3)
+        time.sleep(20)
+        self.increase_tsize(31, -2000)
+        self.increase_tsize(12, -2000)
+        self.increase_tsize(13, -2000)
+        self.update_process_performance("TailLight", 31, -20)
+        self.update_process_performance("HPC", 12, -15)
+        self.update_process_performance("HPC", 13, -15)
+        self.set_state_severity(31,0)
+        self.set_state_severity_level("HPC",0)
+    
+    def send_tail_light_command_ok(self):
+        for _ in range(30):
+            self.increase_tsize(11, 2000)
+            self.increase_tsize(32, 2000)
+            self.update_process_performance("TailLight", 32, 10)
+            self.update_process_performance("HPC", 11, 10)
+            # self.set_state_severity(32,1)
+            self.set_state_severity_level(11,1)
+            time.sleep(4)
+            self.increase_tsize(11, -2000)
+            self.increase_tsize(32, -2000)
+            self.update_process_performance("TailLight", 32, -10)
+            self.update_process_performance("HPC", 11, -10)
+            # self.set_state_severity(32,0)
+            self.set_state_severity_level(11,0)
+        self.send_tail_light_command_false()
+        
+    def send_tail_light_command_false(self):
+        self.increase_tsize(11, 2000)
+        self.increase_tsize(12, 2000)
+        self.increase_tsize(13, 2000)
+        self.update_process_performance("HPC", 11, 20)
+        self.update_process_performance("HPC", 12, 15)
+        self.update_process_performance("HPC", 13, 15)
+        self.set_state_severity("TailLight",3)
+        self.set_state_severity_level("HPC",3)
+        time.sleep(20)
+        self.increase_tsize(11, -2000)
+        self.increase_tsize(12, -2000)
+        self.increase_tsize(13, -2000)
+        self.update_process_performance("HPC", 11, -20)
+        self.update_process_performance("HPC", 12, -15)
+        self.update_process_performance("HPC", 13, -15)
+        self.set_state_severity("TailLight",0)
+        self.set_state_severity_level("HPC",0)
+    
+    # Overloading 
+    
+    def increase_overloading(self):
+        time.sleep(20)
+        for _ in range(7):
+            magnitude = random.randint(300, 700)
+            self.increase_tsize(41, magnitude)
+            self.update_process_performance("Camera", 41, magnitude/100)
+            self.increase_tsize(16, magnitude)
+            self.update_process_performance("HPC", 16, magnitude/100)
+            self.set_state_severity_level(16, 2)
+            self.set_state_severity(16, 2)
+            time.sleep(10)
+        print("increase message drops")
+        for _ in range(3):
+            magnitude = random.randint(300, 700)
+            self.increase_tsize(41, magnitude)
+            self.update_process_performance("Camera", 41, magnitude/100)
+            self.increase_tsize(16, magnitude)
+            self.update_process_performance("HPC", 16, magnitude/100)
+            self.set_state_severity_level(16, 3)
+            self.set_state_severity(16, 3)
+            self.increase_message_drops(13, random.randint(1,4))
+            self.increase_message_drops(33, random.randint(1,4))
+            self.increase_message_drops(15, random.randint(1,4))
+            time.sleep(12)
+        print("escalate overloading")
+        self.escalate_overloading()
+        self.reset()
+        self.initial_setup()
+        print("finished skript")
+        
+    def escalate_overloading(self):
+        self.increase_message_drops(15, 5)
+        self.increase_message_drops(33, 5)
+        self.increase_tsize(12, 3000)
+        self.increase_tsize(13, 3000)
+        self.set_state_severity_level(16, 4)
+        self.set_state_severity(16, 5)
+        self.delete_host("Brakes")
+        self.add_host(
+            hname="HPC",
+            cpu_load=100,
+            total_memory=100,
+            available_memory=0,
+            capacity_disk=100,
+            available_disk=0
+        )
+        time.sleep(10)
+        self.delete_topic("T200")
+        self.delete_topic("T200_sub")
+        time.sleep(15)
+        self.increase_tsize(12, 3000)
+        self.increase_tsize(13, 3000)
+        self.delete_host("TailLight")
+        self.delete_topic("T100")
+        self.delete_topic("T100_sub")
+        self.delete_topic("T400")
+        self.delete_topic("T400_sub")
+        time.sleep(10)
+        self.initial_setup()
+        
+        
+    def run_script(self):
+        
+        self.reset()
+        self.initial_setup()
+        time.sleep(10)
+        self.add_overloading_process()
+        time.sleep(10)
+        
+        # start_time =time.time()
+        # while time.time() - start_time < 300:
+        brake_state_thread = threading.Thread(target=self.send_brake_state_ok)
+        tail_light_state_thread = threading.Thread(target=self.send_tail_light_state_ok)
+        tail_light_command_thread = threading.Thread(target=self.send_tail_light_command_ok)
+        overloading_thread = threading.Thread(target=self.increase_overloading)
+        brake_state_thread.start()
+        tail_light_state_thread.start()
+        tail_light_command_thread.start()
+        overloading_thread.start()
+        
+        
         
