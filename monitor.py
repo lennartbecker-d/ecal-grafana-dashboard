@@ -187,7 +187,7 @@ class Monitor:
             
 
     def update_host_graph(self):
-        hosts = defaultdict(lambda: {"disk_usage": 0, "ram_usage": 0, "cpu_load": 0})
+        hosts = defaultdict(lambda: {"disk_usage": 0, "ram_usage": 0, "cpu_load": 0, "icon": "add-user"})
         for hname, host_dict in self.hosts.items():
             hosts[hname] = {
                 "disk_usage": round(
@@ -200,11 +200,52 @@ class Monitor:
                     / host_dict["total_memory"],
                     ndigits=2,
                 ),
-                "cpu_load": round(number=host_dict["cpu_load"]/100, ndigits=2)
+                "cpu_load": round(number=host_dict["cpu_load"]/100, ndigits=2),
+                "icon": host_dict["icon"]
             }
-        self.host_nodes, self.host_edges = create_host_graph(
-            list(self.topics.values()), hosts
-        )
+            print(host_dict)
+            cpu_load = host_dict["cpu_load"]
+            if cpu_load < 40:
+                # Resetting logged_state if cpu_load is less than 40
+                host_dict["logged_state"] = {
+                    "<60": False,
+                    "<80": False,
+                    ">=80": False
+                }
+            elif cpu_load < 60 and not host_dict["logged_state"]["<60"]:
+                self.logs.append({
+                    "message": f"[CPU SATURATION] investigate host_dict {host_dict["hname"]}",
+                    "level": "warning",
+                })
+                host_dict["logged_state"] = {
+                    "<60": True,
+                    "<80": False,
+                    ">=80": False
+                }
+            elif cpu_load < 80 and not host_dict["logged_state"]["<80"]:
+                self.logs.append({
+                    "message": f"[CPU OVERLOAD] loosing host_dict {host_dict["hname"]}",
+                    "level": "critical",
+                })
+                host_dict["logged_state"] = {
+                    "<60": True,
+                    "<80": True,
+                    ">=80": False
+                }
+            elif not host_dict["logged_state"][">=80"]:
+                self.logs.append({
+                    "message": f"[CPU FAILURE] host_dict {host_dict["hname"]} is not working properly",
+                    "level": "error",
+                })
+                host_dict["logged_state"] = {
+                    "<60": True,
+                    "<80": True,
+                    ">=80": True
+                }
+                
+            self.host_nodes, self.host_edges = create_host_graph(
+                list(self.topics.values()), hosts
+            )
 
     def update_topic_graph(self):
         self.pub_sub_topic_nodes, self.pub_sub_topic_edges = create_pub_sub_topic_graph(
@@ -378,6 +419,7 @@ class Monitor:
                 for hname, performance_dict in data["process_performances"]
             }
             self.hosts = dict(data["hosts"])
+            # self.logs = data["logs"] 
             return {"processes": processes, "services": services, "topics": topics, "clients": clients, "process_performances": self.process_performances, "hosts": self.hosts}
 
     def update_monitor(self, ecal_data):
@@ -386,7 +428,8 @@ class Monitor:
         
         monitoring = ecal_data
         self.hosts = ecal_data.get("hosts", {})
-        self.process_performances = ecal_data.get("process_performances", {})     
+        self.process_performances = ecal_data.get("process_performances", {})
+        # self.logs = ecal_data.get("logs", {})
         
         
         self.update_processes(monitoring["processes"])

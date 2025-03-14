@@ -14,8 +14,8 @@ class ManipulateData:
         self.clients = self.ecal_data.get("clients", {})
         self.topics = self.ecal_data.get("topics", {})
         self.hosts = self.ecal_data.get("hosts", {})
-        self.process_performances = self.ecal_data.get("process_performances", {})     
-    
+        self.process_performances = self.ecal_data.get("process_performances", {})
+        # self.logs = self.ecal_data.get("logs", {})  
     def reset(self):
         print("reset data")
         self.ecal_data = copy.deepcopy(self.ecal_raw_data)
@@ -25,6 +25,7 @@ class ManipulateData:
         self.topics = self.ecal_data.get("topics", {})
         self.hosts = self.ecal_data.get("hosts", {})
         self.process_performances = self.ecal_data.get("process_performances", {})
+        # self.logs = self.ecal_data.get("logs", {})
     
     def return_data(self):
         return copy.deepcopy(self.ecal_data)
@@ -139,7 +140,7 @@ class ManipulateData:
         self.ecal_data["processes"] = self.processes
         
     
-    def add_topic(self, hname, tname, pid, uname, tid, direction, tsize, dfreq, layer = "udp"):
+    def add_topic(self, hname, tname, pid, uname, tid, direction, tsize, dfreq, layer = "udp", icon="add-user"):
         # print("Adding topic")
         new_topic = {
             "rclock": 0,
@@ -177,7 +178,8 @@ class ManipulateData:
             "message_drops": 0,
             "did": 0,
             "dclock": 17,
-            "dfreq": dfreq
+            "dfreq": dfreq,
+            "icon": icon,
         }
         self.topics.append(new_topic)
         if pid not in self.process_performances:
@@ -227,7 +229,7 @@ class ManipulateData:
                     # print("Deleting process performance")
             
     
-    def add_host(self, hname, cpu_load, total_memory, available_memory, capacity_disk, available_disk):
+    def add_host(self, hname, cpu_load, total_memory, available_memory, capacity_disk, available_disk, icon):
         # print("Adding new host ", hname)
         new_host = {
                 "hname": hname,
@@ -239,19 +241,23 @@ class ManipulateData:
                 "network_send": -1,
                 "network_receive": -1,
                 "os": "LINUX Ubuntu 24.04.2 LTS",
-                "num_cpu_cores": 20
+                "num_cpu_cores": 20,
+                "icon": icon,
+                "logged_state":{
+                                "<60": False,
+                                "<80": False,
+                                ">=80": False
+                            }
             }
         self.hosts[hname] = new_host
     
-    def update_host_capacity(self):
+    def update_host_performance(self):
         for host in self.hosts.values():
             tsize = 0
             # Add all incoming and outgoing packages
             for topic in self.topics:
                 if host["hname"] == topic["hname"]:
                     tsize += topic["tsize"]
-            
-            print(host)
             
             cpu_load = tsize/host["total_memory"] * 100
             available_memory = host["total_memory"] - tsize
@@ -260,9 +266,44 @@ class ManipulateData:
             host["cpu_load"] = cpu_load
             host["available_memory"] = available_memory
             host["available_disk"] = available_disk
-
-            print(host)
-            print("#############################################")
+            
+            # if cpu_load < 40:
+            #     # Resetting logged_state if cpu_load is less than 40
+            #     host["logged_state"] = {
+            #         "<60": False,
+            #         "<80": False,
+            #         ">=80": False
+            #     }
+            # elif cpu_load < 60 and not host["logged_state"]["<60"]:
+            #     self.logs.append({
+            #         "message": f"[CPU SATURATION] investigate host {host["hname"]}",
+            #         "level": "warning",
+            #     })
+            #     host["logged_state"] = {
+            #         "<60": True,
+            #         "<80": False,
+            #         ">=80": False
+            #     }
+            # elif cpu_load < 80 and not host["logged_state"]["<80"]:
+            #     self.logs.append({
+            #         "message": f"[CPU OVERLOAD] loosing host {host["hname"]}",
+            #         "level": "critical",
+            #     })
+            #     host["logged_state"] = {
+            #         "<60": True,
+            #         "<80": True,
+            #         ">=80": False
+            #     }
+            # elif not host["logged_state"][">=80"]:
+            #     self.logs.append({
+            #         "message": f"[CPU FAILURE] host {host["hname"]} is not working properly",
+            #         "level": "error",
+            #     })
+            #     host["logged_state"] = {
+            #         "<60": True,
+            #         "<80": True,
+            #         ">=80": True
+            #     }
         
     def delete_host(self, hname):
         del self.hosts[hname] 
@@ -282,7 +323,8 @@ class ManipulateData:
             total_memory=1.9252312e7,
             available_memory=1.9252312e7,
             capacity_disk=18.7582392e7,
-            available_disk=18.7582392e7
+            available_disk=18.7582392e7,
+            icon = "camera"
         )
 
         self.add_host(
@@ -291,7 +333,8 @@ class ManipulateData:
             total_memory=3.61283654e7,
             available_memory=3.61283654e7,
             capacity_disk=44.13467724e7,
-            available_disk=44.13467724e7
+            available_disk=44.13467724e7,
+            icon = "calculator-alt"
         )
         
         self.add_host(
@@ -300,7 +343,8 @@ class ManipulateData:
             total_memory=1.54435343e7,
             available_memory=1.54435343e7,
             capacity_disk=25.12352323e7,
-            available_disk=25.12352323e7
+            available_disk=25.12352323e7,
+            icon = "monitor"
         )
         
         self.add_host(
@@ -309,7 +353,8 @@ class ManipulateData:
             total_memory=2.345432534e7,
             available_memory=2.345432534e7,
             capacity_disk=70.12312445e7,
-            available_disk=70.12312445e7
+            available_disk=70.12312445e7,
+            icon = "multi-step"
         )
 
         # --- Add Processes ---
@@ -379,7 +424,8 @@ class ManipulateData:
             direction="publisher",
             tsize=0,
             dfreq=1000000,
-            layer="udp"
+            layer="udp",
+            icon="camera"
         )
         
         self.add_topic(
@@ -391,7 +437,8 @@ class ManipulateData:
             direction="subscriber",
             tsize=0,
             dfreq=1000000,
-            layer="udp"
+            layer="udp",
+            icon="calculator-alt"
         )
         
         self.add_topic(
@@ -403,7 +450,8 @@ class ManipulateData:
             direction="publisher",
             tsize=0,
             dfreq=1000000,
-            layer="udp"
+            layer="udp",
+            icon="calculator-alt"
         )
         
         self.add_topic(
@@ -415,7 +463,8 @@ class ManipulateData:
             direction="subscriber",
             tsize=0,
             dfreq=1000000,
-            layer="udp"
+            layer="udp",
+            icon="monitor"
         )
         
         self.add_topic(
@@ -427,7 +476,8 @@ class ManipulateData:
             direction="publisher",
             tsize=0,
             dfreq=1000000,
-            layer="udp"
+            layer="udp",
+            icon="calculator-alt"
         )
         
         self.add_topic(
@@ -439,7 +489,8 @@ class ManipulateData:
             direction="subscriber",
             tsize=0,
             dfreq=1000000,
-            layer="udp"
+            layer="udp",
+            icon="multi-step"
         )
 
 ###########################################################################################################################################
@@ -464,10 +515,10 @@ class ManipulateData:
         self.send_visualization(size2, process_ok)
         self.create_path(size2, process_ok)
             
-        self.update_host_capacity()
+        self.update_host_performance()
         self.update_severity()
         self.update_process_performance()
-        self.set_message_drops(21, (size-size2)/400)
+        self.set_message_drops(21, (size-size2)/100000)
     
     def send_visualization(self, size_images, process_ok):
         size = size_images/2 * random.normalvariate(1, 0.3)
@@ -482,7 +533,7 @@ class ManipulateData:
             self.set_tsize(23, size)
             self.set_tsize(32, size2)
             
-        self.set_message_drops(32, (size-size2)/20)
+        self.set_message_drops(32, (size-size2)/2000)
     
     def create_path(self, size_images, process_ok):
         size = size_images/3 * random.normalvariate(1, 0.4)
@@ -497,7 +548,7 @@ class ManipulateData:
             self.set_tsize(24, size)
             self.set_tsize(42, size2)
             
-        self.set_message_drops(42, (size-size2)/20)
+        self.set_message_drops(42, (size-size2)/6000)
         
     
     def escalate_overloading(self):
@@ -537,28 +588,33 @@ class ManipulateData:
         self.initial_setup()
         # time.sleep(10)
         
-        # Running healthy
+        # # Running healthy
         # for _ in range(3):
-        #     size = random.normalvariate(200000, 60000)
-        #     size = max(50000, min(size, 500000))
+        #     size = random.normalvariate(200e3, 60e3)
+        #     size = max(50e3, min(size, 500e3))
         #     self.send_images(size)
         #     time.sleep(5)
         
+        # print("Increase overloading 1")
         # # Increase overloading 1
         # for _ in range(5):
-        #     size = random.normalvariate(400000, 120000)
-        #     size = max(200000, min(size, 700000))
+        #     size = random.normalvariate(400e3, 120e3)
+        #     size = max(200e3, min(size, 700e3))
         #     self.send_images(size)
         #     time.sleep(5)
         
-        # # Increase overloading 2
-        # for _ in range(5):
-        #     size = random.normalvariate(700000, 60000)
-        #     size = max(500000, min(size, 900000))
-        #     self.send_images(size)
-        #     time.sleep(5)
+        # Increase overloading 2
+        print("Increase overloading 2")
+        
+        for _ in range(5):
+            size = random.normalvariate(1.4e7, 200e3)
+            size = max(1.0234123e7, min(size, self.hosts["CamGrabber"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
+            
+        print("Escalate")
+        self.send_images(self.hosts["CamGrabber"]["total_memory"])
 
-        self.send_images(19252312)
         
         # self.add_overloading_process()
         # time.sleep(10)

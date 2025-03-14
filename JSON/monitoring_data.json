@@ -4,5 +4,6 @@
     "services": [],
     "clients": [],
     "hosts": [],
-    "process_performances": []
+    "process_performances": [],
+    "logs": []
 }

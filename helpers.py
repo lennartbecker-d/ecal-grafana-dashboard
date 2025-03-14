@@ -159,9 +159,10 @@ def create_host_graph(topics, host_dict):
             title=host["hname"],
             subtitle="",
             mainstat=0,
-            secondarystat=host_dict[host["hname"]]["disk_usage"] * 100,
+            secondarystat=host_dict[host["hname"]]["cpu_load"] * 100,
             arcs=arcs,
             details=details,
+            icon=host_dict[host["hname"]]["icon"],
         )
     pub_list = [pub for pub in topics if pub["direction"] == "publisher"]
     sub_list = [sub for sub in topics if sub["direction"] == "subscriber"]
@@ -294,6 +295,7 @@ def create_pub_sub_topic_graph(topics, process_performances):
                 secondarystat=t["tname"],
                 arcs=arcs,
                 details=details,
+                icon=t["icon"],
             )
 
             edge_id = f"{node_id}-{t['tname']}"
@@ -319,6 +321,7 @@ def create_pub_sub_topic_graph(topics, process_performances):
                 secondarystat=t["tname"],
                 arcs=arcs,
                 details=details,
+                icon=t["icon"],
             )
             edge_id = f"{t['tname']}-{node_id}"
             edge_dict[edge_id] = create_edge(
