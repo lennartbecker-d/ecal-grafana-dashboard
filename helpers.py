@@ -126,9 +126,9 @@ def get_arc_cpu(process_performances, hname, pid):
             return {}
         else:
             cpu_load = round(number=cpu_load / 100, ndigits=5)
-        arcs = {"arc__cpu_used": cpu_load, "arc__cpu_unused": (1 - cpu_load)}
+        arcs = {"arc__cpu_used": cpu_load, "arc__cpu_unused": (1 - cpu_load), "arc__cpu_neglect": 0}
     else:
-        arcs = {"arc__cpu_used": None, "arc__cpu_unused": None}
+        arcs = {"arc__cpu_used": None, "arc__cpu_unused": None, "arc__cpu_neglect": None}
     return arcs
 
 
@@ -339,6 +339,7 @@ def create_pub_sub_topic_graph(topics, process_performances):
             subtitle="",
             mainstat=None,
             secondarystat=t["tname"],
+            arcs = {"arc__cpu_used": 0, "arc__cpu_unused": 0, "arc__cpu_neglect": 1},
             highlighted="true",
             icon="comment-alt",
         )

@@ -123,14 +123,14 @@ class ManipulateData:
         "state_severity_level": state_severity_level,
         layer + "_transport_domain": hname,
         "rclock": 0, 
-        "pname": "/usr/bin/ecal_mma-5.13.3",
-        "pparam": "ecal_mma-5.13.3",
+        "pname": "/usr/bin/ecal_mma-6.0.0-rc",
+        "pparam": "ecal_mma-6.0.0-rc",
         "state_info": "Running",
         "tsync_state": 0,
         "tsync_mod_name": "",
         "component_init_state": 129,
         "component_init_info": "pub",
-        "ecal_runtime_version": "v5.13.3"
+        "ecal_runtime_version": "v6.0.0-rc.1-23-g21abac1cc"
     }
         self.processes.append(new_process)
     
@@ -259,51 +259,51 @@ class ManipulateData:
                 if host["hname"] == topic["hname"]:
                     tsize += topic["tsize"]
             
-            cpu_load = tsize/host["total_memory"] * 100
-            available_memory = host["total_memory"] - tsize
-            available_disk = host["capacity_disk"]- tsize 
+            cpu_load = min(100, tsize/host["total_memory"] * random.randint(70, 130))
+            available_memory = max(0, host["total_memory"] - tsize)
+            available_disk = max(0, host["capacity_disk"]- tsize) 
             
             host["cpu_load"] = cpu_load
             host["available_memory"] = available_memory
             host["available_disk"] = available_disk
             
-            # if cpu_load < 40:
-            #     # Resetting logged_state if cpu_load is less than 40
-            #     host["logged_state"] = {
-            #         "<60": False,
-            #         "<80": False,
-            #         ">=80": False
-            #     }
-            # elif cpu_load < 60 and not host["logged_state"]["<60"]:
-            #     self.logs.append({
-            #         "message": f"[CPU SATURATION] investigate host {host["hname"]}",
-            #         "level": "warning",
-            #     })
-            #     host["logged_state"] = {
-            #         "<60": True,
-            #         "<80": False,
-            #         ">=80": False
-            #     }
-            # elif cpu_load < 80 and not host["logged_state"]["<80"]:
-            #     self.logs.append({
-            #         "message": f"[CPU OVERLOAD] loosing host {host["hname"]}",
-            #         "level": "critical",
-            #     })
-            #     host["logged_state"] = {
-            #         "<60": True,
-            #         "<80": True,
-            #         ">=80": False
-            #     }
-            # elif not host["logged_state"][">=80"]:
-            #     self.logs.append({
-            #         "message": f"[CPU FAILURE] host {host["hname"]} is not working properly",
-            #         "level": "error",
-            #     })
-            #     host["logged_state"] = {
-            #         "<60": True,
-            #         "<80": True,
-            #         ">=80": True
-            #     }
+            if cpu_load < 40:
+                # Resetting logged_state if cpu_load is less than 40
+                host["logged_state"] = {
+                    "<60": False,
+                    "<80": False,
+                    ">=80": False
+                }
+            elif cpu_load < 60 and not host["logged_state"]["<60"]:
+                # self.logs.append({
+                #     "message": f"[CPU SATURATION] investigate host {host["hname"]}",
+                #     "level": "warning",
+                # })
+                host["logged_state"] = {
+                    "<60": True,
+                    "<80": False,
+                    ">=80": False
+                }
+            elif cpu_load < 80 and not host["logged_state"]["<80"]:
+                # self.logs.append({
+                #     "message": f"[CPU OVERLOAD] loosing host {host["hname"]}",
+                #     "level": "critical",
+                # })
+                host["logged_state"] = {
+                    "<60": True,
+                    "<80": True,
+                    ">=80": False
+                }
+            elif not host["logged_state"][">=80"]:
+                # self.logs.append({
+                #     "message": f"[CPU FAILURE] host {host["hname"]} is not working properly",
+                #     "level": "error",
+                # })
+                host["logged_state"] = {
+                    "<60": True,
+                    "<80": True,
+                    ">=80": True
+                }
         
     def delete_host(self, hname):
         del self.hosts[hname] 
@@ -405,7 +405,7 @@ class ManipulateData:
         )
         
         self.add_process(
-            hname="LaneRecognition",
+            hname="PathPlanning",
             pid=43,
             uname="ReceivePathInformation",
             state_severity=1,
@@ -508,7 +508,7 @@ class ManipulateData:
         if process_ok:
             self.set_tsize("Images", size)
         else:
-            size2 = size*0.95
+            size2 = size*0.98
             self.set_tsize(12, size)
             self.set_tsize(21, size2)
             
@@ -521,7 +521,7 @@ class ManipulateData:
         self.set_message_drops(21, (size-size2)/100000)
     
     def send_visualization(self, size_images, process_ok):
-        size = size_images/2 * random.normalvariate(1, 0.3)
+        size = size_images/2 * max(0.1, random.normalvariate(1, 0.3))
         # size = max(500, min(size, 10000))
 
         size2 = size
@@ -529,14 +529,14 @@ class ManipulateData:
         if process_ok:
             self.set_tsize("Visualization", size)
         else:
-            size2 = size*0.95
+            size2 = size*0.98
             self.set_tsize(23, size)
             self.set_tsize(32, size2)
             
         self.set_message_drops(32, (size-size2)/2000)
     
     def create_path(self, size_images, process_ok):
-        size = size_images/3 * random.normalvariate(1, 0.4)
+        size = size_images/3 * max(0.1, random.normalvariate(1, 0.4))
         # size = max(100, min(size, 7000))
         
         size2 = size
@@ -544,7 +544,7 @@ class ManipulateData:
         if process_ok:
             self.set_tsize("Path", size)
         else:
-            size2 = size*0.95
+            size2 = size*0.98
             self.set_tsize(24, size)
             self.set_tsize(42, size2)
             
@@ -586,34 +586,38 @@ class ManipulateData:
         self.start_time = time.time()
         self.reset()
         self.initial_setup()
-        # time.sleep(10)
+        time.sleep(10)
         
-        # # Running healthy
-        # for _ in range(3):
-        #     size = random.normalvariate(200e3, 60e3)
-        #     size = max(50e3, min(size, 500e3))
-        #     self.send_images(size)
-        #     time.sleep(5)
+        # Running healthy
+        for _ in range(3):
+            size = random.normalvariate(200e3, 60e3)
+            size = max(50e3, min(size, 0.25*self.hosts["CamGrabber"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
         
-        # print("Increase overloading 1")
-        # # Increase overloading 1
-        # for _ in range(5):
-        #     size = random.normalvariate(400e3, 120e3)
-        #     size = max(200e3, min(size, 700e3))
-        #     self.send_images(size)
-        #     time.sleep(5)
+        print("Increase overloading 1")
+        # Increase overloading 1
+        for _ in range(5):
+            size = random.normalvariate(0.2*self.hosts["CamGrabber"]["total_memory"], 0.06*self.hosts["CamGrabber"]["total_memory"])
+            size = max(0.1*self.hosts["CamGrabber"]["total_memory"], 0.35* min(size, 0.2*self.hosts["CamGrabber"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
         
         # Increase overloading 2
         print("Increase overloading 2")
         
         for _ in range(5):
-            size = random.normalvariate(1.4e7, 200e3)
-            size = max(1.0234123e7, min(size, self.hosts["CamGrabber"]["total_memory"]))
+            size = random.normalvariate(0.7*self.hosts["CamGrabber"]["total_memory"], 0.1*self.hosts["CamGrabber"]["total_memory"])
+            size = max(0.5*self.hosts["CamGrabber"]["total_memory"], min(size, self.hosts["CamGrabber"]["total_memory"]))
             self.send_images(size)
             time.sleep(5)
             
         print("Escalate")
-        self.send_images(self.hosts["CamGrabber"]["total_memory"])
+        for _ in range(10):
+            size = random.normalvariate(0.95*self.hosts["CamGrabber"]["total_memory"], 0.03*self.hosts["CamGrabber"]["total_memory"])
+            size = max(0.8*self.hosts["CamGrabber"]["total_memory"], min(size, self.hosts["CamGrabber"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
 
         
         # self.add_overloading_process()

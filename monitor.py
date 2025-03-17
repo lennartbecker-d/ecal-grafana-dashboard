@@ -142,6 +142,35 @@ class Monitor:
                         "level": "warning",
                     }
                 )
+                
+    # helper for live-demo to emmulate Log message            
+    def update_hosts(self, hosts):
+        self.previous_hosts = self.hosts
+        self.hosts = hosts
+        for hname, host_dict in self.hosts.items():
+            
+            if hname in self.previous_hosts:
+                previous_host_dict = self.previous_hosts[hname]
+                previous_logged_state = previous_host_dict.get("logged_state", {})
+                current_logged_state = host_dict.get("logged_state", {})
+
+                if previous_logged_state != current_logged_state:
+                    for state, logged in current_logged_state.items():
+                        if logged and not previous_logged_state.get(state, False):
+                            if state == "<60":
+                                level = "warning"
+                                message = f"[CPU SATURATION] investigate host {hname}"
+                            elif state == "<80":
+                                level = "critical"
+                                message = f"[CPU OVERLOAD] host {hname} is not working properly"
+                            elif state == ">=80":
+                                level = "error"
+                                message = f"[CPU FAILURE] loosing host {hname}"
+
+                            self.logs.append({
+                                "message": message,
+                                "level": level,
+                            })
 
     def update_host(self, hname, host):
         # extend for multiple disks and networks
@@ -203,45 +232,45 @@ class Monitor:
                 "cpu_load": round(number=host_dict["cpu_load"]/100, ndigits=2),
                 "icon": host_dict["icon"]
             }
-            print(host_dict)
-            cpu_load = host_dict["cpu_load"]
-            if cpu_load < 40:
-                # Resetting logged_state if cpu_load is less than 40
-                host_dict["logged_state"] = {
-                    "<60": False,
-                    "<80": False,
-                    ">=80": False
-                }
-            elif cpu_load < 60 and not host_dict["logged_state"]["<60"]:
-                self.logs.append({
-                    "message": f"[CPU SATURATION] investigate host_dict {host_dict["hname"]}",
-                    "level": "warning",
-                })
-                host_dict["logged_state"] = {
-                    "<60": True,
-                    "<80": False,
-                    ">=80": False
-                }
-            elif cpu_load < 80 and not host_dict["logged_state"]["<80"]:
-                self.logs.append({
-                    "message": f"[CPU OVERLOAD] loosing host_dict {host_dict["hname"]}",
-                    "level": "critical",
-                })
-                host_dict["logged_state"] = {
-                    "<60": True,
-                    "<80": True,
-                    ">=80": False
-                }
-            elif not host_dict["logged_state"][">=80"]:
-                self.logs.append({
-                    "message": f"[CPU FAILURE] host_dict {host_dict["hname"]} is not working properly",
-                    "level": "error",
-                })
-                host_dict["logged_state"] = {
-                    "<60": True,
-                    "<80": True,
-                    ">=80": True
-                }
+            # print(host_dict)
+            # cpu_load = host_dict["cpu_load"]
+            # if cpu_load < 40:
+            #     # Resetting logged_state if cpu_load is less than 40
+            #     host_dict["logged_state"] = {
+            #         "<60": False,
+            #         "<80": False,
+            #         ">=80": False
+            #     }
+            # elif cpu_load < 60 and not host_dict["logged_state"]["<60"]:
+            #     self.logs.append({
+            #         "message": f"[CPU SATURATION] investigate host_dict {host_dict["hname"]}",
+            #         "level": "warning",
+            #     })
+            #     host_dict["logged_state"] = {
+            #         "<60": True,
+            #         "<80": False,
+            #         ">=80": False
+            #     }
+            # elif cpu_load < 80 and not host_dict["logged_state"]["<80"]:
+            #     self.logs.append({
+            #         "message": f"[CPU OVERLOAD] loosing host_dict {host_dict["hname"]}",
+            #         "level": "critical",
+            #     })
+            #     host_dict["logged_state"] = {
+            #         "<60": True,
+            #         "<80": True,
+            #         ">=80": False
+            #     }
+            # elif not host_dict["logged_state"][">=80"]:
+            #     self.logs.append({
+            #         "message": f"[CPU FAILURE] host_dict {host_dict["hname"]} is not working properly",
+            #         "level": "error",
+            #     })
+            #     host_dict["logged_state"] = {
+            #         "<60": True,
+            #         "<80": True,
+            #         ">=80": True
+            #     }
                 
             self.host_nodes, self.host_edges = create_host_graph(
                 list(self.topics.values()), hosts
@@ -427,7 +456,7 @@ class Monitor:
         # monitoring = monitoring_d[1]
         
         monitoring = ecal_data
-        self.hosts = ecal_data.get("hosts", {})
+        self.update_hosts(ecal_data.get("hosts", {}))
         self.process_performances = ecal_data.get("process_performances", {})
         # self.logs = ecal_data.get("logs", {})
         
