@@ -34,33 +34,26 @@ class ManipulateData:
         for topic in self.topics:
             if topic['tid'] == identifier or topic['hname'] == identifier or topic['pid'] == identifier or topic['tname'] == identifier or topic['uname'] == identifier:
                 topic['tsize'] = magnitude
-                # print(f"tsize for {identifier} increased to {topic['tsize']}")
 
     def set_dfreq(self, identifier, magnitude):
         for topic in self.topics:
             if topic['tid'] == identifier or topic['hname'] == identifier or topic['pid'] == identifier or topic['tname'] == identifier or topic['uname'] == identifier:
                 topic['dfreq'] = magnitude
-                # print(f"dfreq for {identifier} increased to {topic['dfreq']}")
 
     def set_message_drops(self, identifier, magnitude):
         for topic in self.topics:
             if topic['tid'] == identifier or topic['hname'] == identifier or topic['pid'] == identifier or topic['tname'] == identifier or topic['uname'] == identifier:
                 topic['message_drops'] = magnitude
-                # print(f"message_drops for {identifier} increased to {topic['message_drops']}")
 
     def set_state_severity(self, identifier, magnitude):
         for process in self.processes:
             if process['hname'] == identifier or process['pid'] == identifier or process['uname'] == identifier:
-                # new_value = max(0, process['state_severity'] + magnitude)
                 process['state_severity'] = magnitude
-                # print(f"state_severity for {identifier} increased to {process['state_severity']}")
 
     def set_state_severity_level(self, identifier, magnitude):
         for process in self.processes:
             if process['hname'] == identifier or process['pid'] == identifier or process['uname'] == identifier:
-                # new_value = max(0, process['state_severity_level'] + magnitude)
                 process['state_severity_level'] = magnitude
-                # print(f"state_severity_level for {identifier} increased to {process['state_severity_level']}")
     
     def update_severity(self):
         for process in self.processes:
@@ -140,7 +133,8 @@ class ManipulateData:
         self.ecal_data["processes"] = self.processes
         
     
-    def add_topic(self, hname, tname, pid, uname, tid, direction, tsize, dfreq, layer = "udp", icon="add-user"):
+    def add_topic(self, hname, tname, pid, uname, tid, direction, tsize, dfreq, layer = "udp", icon="add-user", connections_loc = 1,
+            connections_ext= 0):
         # print("Adding topic")
         new_topic = {
             "rclock": 0,
@@ -173,11 +167,11 @@ class ManipulateData:
                 }
             ],
             "tsize": tsize,
-            "connections_loc": 1,
-            "connections_ext": 0,
+            "connections_loc": connections_loc,
+            "connections_ext": connections_ext,
             "message_drops": 0,
             "did": 0,
-            "dclock": 17,
+            "dclock": 0,
             "dfreq": dfreq,
             "icon": icon,
         }
@@ -258,8 +252,8 @@ class ManipulateData:
             for topic in self.topics:
                 if host["hname"] == topic["hname"]:
                     tsize += topic["tsize"]
-            
-            cpu_load = min(100, tsize/host["total_memory"] * random.randint(70, 130))
+            tsize /= 2.5
+            cpu_load = min(100, tsize/host["total_memory"] * random.randint(95, 105))
             available_memory = max(0, host["total_memory"] - tsize)
             available_disk = max(0, host["capacity_disk"]- tsize) 
             
@@ -274,36 +268,15 @@ class ManipulateData:
                     "<80": False,
                     ">=80": False
                 }
+                pass
             elif cpu_load < 60 and not host["logged_state"]["<60"]:
-                # self.logs.append({
-                #     "message": f"[CPU SATURATION] investigate host {host["hname"]}",
-                #     "level": "warning",
-                # })
-                host["logged_state"] = {
-                    "<60": True,
-                    "<80": False,
-                    ">=80": False
-                }
+                host["logged_state"]["<60"] = True
+                
             elif cpu_load < 80 and not host["logged_state"]["<80"]:
-                # self.logs.append({
-                #     "message": f"[CPU OVERLOAD] loosing host {host["hname"]}",
-                #     "level": "critical",
-                # })
-                host["logged_state"] = {
-                    "<60": True,
-                    "<80": True,
-                    ">=80": False
-                }
+                host["logged_state"]["<80"] = True
+                
             elif not host["logged_state"][">=80"]:
-                # self.logs.append({
-                #     "message": f"[CPU FAILURE] host {host["hname"]} is not working properly",
-                #     "level": "error",
-                # })
-                host["logged_state"] = {
-                    "<60": True,
-                    "<80": True,
-                    ">=80": True
-                }
+                host["logged_state"][">=80"] = True
         
     def delete_host(self, hname):
         del self.hosts[hname] 
@@ -318,7 +291,7 @@ class ManipulateData:
     def initial_setup(self):
         # --- Add Hosts ---
         self.add_host(
-            hname="CamGrabber",
+            hname="VisionPro",
             cpu_load=0,
             total_memory=1.9252312e7,
             available_memory=1.9252312e7,
@@ -327,40 +300,21 @@ class ManipulateData:
             icon = "camera"
         )
 
-        self.add_host(
-            hname="LaneRecognition",
-            cpu_load=0,
-            total_memory=3.61283654e7,
-            available_memory=3.61283654e7,
-            capacity_disk=44.13467724e7,
-            available_disk=44.13467724e7,
-            icon = "calculator-alt"
-        )
         
         self.add_host(
-            hname="HMI",
+            hname="NavigatorInterface",
             cpu_load=0,
-            total_memory=1.54435343e7,
-            available_memory=1.54435343e7,
+            total_memory=2.54435343e7,
+            available_memory=2.54435343e7,
             capacity_disk=25.12352323e7,
             available_disk=25.12352323e7,
             icon = "monitor"
-        )
-        
-        self.add_host(
-            hname="PathPlanning",
-            cpu_load=0,
-            total_memory=2.345432534e7,
-            available_memory=2.345432534e7,
-            capacity_disk=70.12312445e7,
-            available_disk=70.12312445e7,
-            icon = "multi-step"
         )
 
         # --- Add Processes ---
         
         self.add_process(
-            hname="CamGrabber",
+            hname="VisionPro",
             pid=12,
             uname="SendImages",
             state_severity=1,
@@ -369,7 +323,7 @@ class ManipulateData:
         )
         
         self.add_process(
-            hname="LaneRecognition",
+            hname="VisionPro",
             pid=21,
             uname="ReceiveImages",
             state_severity=1,
@@ -378,16 +332,16 @@ class ManipulateData:
         )
         
         self.add_process(
-            hname="LaneRecognition",
+            hname="VisionPro",
             pid=23,
-            uname="SendVisualization",
+            uname="SendLaneInformation",
             state_severity=1,
             state_severity_level=1,
             layer="udp"
         )
         
         self.add_process(
-            hname="HMI",
+            hname="NavigatorInterface",
             pid=32,
             uname="ReceiveVisualization",
             state_severity=1,
@@ -396,17 +350,8 @@ class ManipulateData:
         )
         
         self.add_process(
-            hname="LaneRecognition",
-            pid=34,
-            uname="SendPathInformation",
-            state_severity=1,
-            state_severity_level=1,
-            layer="udp"
-        )
-        
-        self.add_process(
-            hname="PathPlanning",
-            pid=43,
+            hname="NavigatorInterface",
+            pid=42,
             uname="ReceivePathInformation",
             state_severity=1,
             state_severity_level=1,
@@ -416,81 +361,78 @@ class ManipulateData:
         # --- Add Topics ---
         
         self.add_topic(
-            hname="CamGrabber",
+            hname="VisionPro",
             tname="TransferImages",
             pid=12,
-            uname="Images",
+            uname="CamGrabber",
             tid="T100",
             direction="publisher",
             tsize=0,
-            dfreq=1000000,
+            dfreq=100000,
             layer="udp",
-            icon="camera"
+            icon="camera",
+            connections_loc=1,
+            connections_ext=0
         )
         
         self.add_topic(
-            hname="LaneRecognition",
+            hname="VisionPro",
             tname="TransferImages",
             pid=21,
-            uname="Images",
+            uname="LaneRecognition",
             tid="T100_sub",
             direction="subscriber",
             tsize=0,
-            dfreq=1000000,
+            dfreq=100000,
             layer="udp",
-            icon="calculator-alt"
+            icon="calculator-alt",
+            connections_loc=1,
+            connections_ext=0
         )
         
         self.add_topic(
-            hname="LaneRecognition",
-            tname="TransferVisualization",
+            hname="VisionPro",
+            tname="TransferLanes",
             pid=23,
-            uname="Visualization",
+            uname="LaneRecognition",
             tid="T200",
             direction="publisher",
             tsize=0,
-            dfreq=1000000,
+            dfreq=100000,
             layer="udp",
-            icon="calculator-alt"
+            icon="calculator-alt",
+            connections_loc=0,
+            connections_ext=2
         )
         
         self.add_topic(
-            hname="HMI",
-            tname="TransferVisualization",
+            hname="NavigatorInterface",
+            tname="TransferLanes",
             pid=32,
-            uname="Visualization",
-            tid="T200_sub",
+            uname="HMI",
+            tid="T200_sub_1",
             direction="subscriber",
             tsize=0,
-            dfreq=1000000,
+            dfreq=100000,
             layer="udp",
-            icon="monitor"
+            icon="monitor",
+            connections_loc=0,
+            connections_ext=1
         )
         
         self.add_topic(
-            hname="LaneRecognition",
-            tname="TransferPathInformation",
-            pid=24,
-            uname="Path",
-            tid="T300",
-            direction="publisher",
-            tsize=0,
-            dfreq=1000000,
-            layer="udp",
-            icon="calculator-alt"
-        )
-        
-        self.add_topic(
-            hname="PathPlanning",
-            tname="TransferPathInformation",
+            hname="NavigatorInterface",
+            tname="TransferLanes",
             pid=42,
-            uname="Path",
-            tid="T300_sub",
+            uname="PathPlanning",
+            tid="T200_sub_2",
             direction="subscriber",
             tsize=0,
-            dfreq=1000000,
+            dfreq=100000,
             layer="udp",
-            icon="multi-step"
+            icon="multi-step",
+            connections_loc=0,
+            connections_ext=1
         )
 
 ###########################################################################################################################################
@@ -499,88 +441,39 @@ class ManipulateData:
     
     def send_images(self, size):
         self.update_rclock()
-        process_ok = True
-        if size > 600000:
-            process_ok = False
-        
-        size2 = size
-        
+        process_ok = (size < 600e3)
         if process_ok:
-            self.set_tsize("Images", size)
+            size2 = size
         else:
             size2 = size*0.98
-            self.set_tsize(12, size)
-            self.set_tsize(21, size2)
-            
-        self.send_visualization(size2, process_ok)
-        self.create_path(size2, process_ok)
+        self.set_tsize(12, size)
+        self.set_tsize(21, size2)
+
+        size3 = size2/2 * max(0.1, random.normalvariate(1, 0.3))
+        self.set_tsize(23, size3)
+        self.send_visualization(size3)
+        self.create_path(size3)
             
         self.update_host_performance()
         self.update_severity()
         self.update_process_performance()
-        self.set_message_drops(21, (size-size2)/100000)
+        self.set_message_drops(12, (size-size2)/random.normalvariate(3000, 500))
+        self.set_message_drops(21, (size-size2)/random.normalvariate(3000, 500))
     
-    def send_visualization(self, size_images, process_ok):
-        size = size_images/2 * max(0.1, random.normalvariate(1, 0.3))
-        # size = max(500, min(size, 10000))
+    def send_visualization(self, size):
+        
+        size2 = size * max(0.65, random.normalvariate(0.8, 0.03))
+        self.set_tsize(32, size2)
+        self.set_message_drops(23, (size-size2)/random.normalvariate(50000, 2000))
+        self.set_message_drops(32, (size-size2)/random.normalvariate(100000, 5000))
+    
+    def create_path(self, size):
 
-        size2 = size
+        size2 = size * max(0.6, random.normalvariate(0.75, 0.03))
+        self.set_tsize(42, size2)
+        self.set_message_drops(42, (size-size2)/random.normalvariate(100000, 5000))
         
-        if process_ok:
-            self.set_tsize("Visualization", size)
-        else:
-            size2 = size*0.98
-            self.set_tsize(23, size)
-            self.set_tsize(32, size2)
-            
-        self.set_message_drops(32, (size-size2)/2000)
-    
-    def create_path(self, size_images, process_ok):
-        size = size_images/3 * max(0.1, random.normalvariate(1, 0.4))
-        # size = max(100, min(size, 7000))
-        
-        size2 = size
-        
-        if process_ok:
-            self.set_tsize("Path", size)
-        else:
-            size2 = size*0.98
-            self.set_tsize(24, size)
-            self.set_tsize(42, size2)
-            
-        self.set_message_drops(42, (size-size2)/6000)
-        
-    
-    def escalate_overloading(self):
-        self.set_message_drops(15, 5)
-        self.set_message_drops(33, 5)
-        self.set_tsize(12, 3000)
-        self.set_tsize(13, 3000)
-        self.set_state_severity_level(16, 4)
-        self.set_state_severity(16, 5)
-        self.delete_host("Brakes")
-        self.add_host(
-            hname="HPC",
-            cpu_load=100,
-            total_memory=100,
-            available_memory=0,
-            capacity_disk=100,
-            available_disk=0
-        )
-        time.sleep(10)
-        self.delete_topic("T200")
-        self.delete_topic("T200_sub")
-        time.sleep(15)
-        self.set_tsize(12, 3000)
-        self.set_tsize(13, 3000)
-        self.delete_host("TailLight")
-        self.delete_topic("T100")
-        self.delete_topic("T100_sub")
-        self.delete_topic("T400")
-        self.delete_topic("T400_sub")
-        time.sleep(10)
-        self.initial_setup()
-        
+    ######################################################################################################################## 
         
     def run_script(self):
         self.start_time = time.time()
@@ -588,51 +481,39 @@ class ManipulateData:
         self.initial_setup()
         time.sleep(10)
         
-        # Running healthy
-        for _ in range(3):
-            size = random.normalvariate(200e3, 60e3)
-            size = max(50e3, min(size, 0.25*self.hosts["CamGrabber"]["total_memory"]))
-            self.send_images(size)
-            time.sleep(5)
+        while True:
+            # Running healthy
+            for _ in range(10):
+                size = random.normalvariate(200e3, 60e3)
+                size = max(50e3, min(size, 0.25*self.hosts["VisionPro"]["total_memory"]))
+                self.send_images(size)
+                time.sleep(5)
         
-        print("Increase overloading 1")
-        # Increase overloading 1
-        for _ in range(5):
-            size = random.normalvariate(0.2*self.hosts["CamGrabber"]["total_memory"], 0.06*self.hosts["CamGrabber"]["total_memory"])
-            size = max(0.1*self.hosts["CamGrabber"]["total_memory"], 0.35* min(size, 0.2*self.hosts["CamGrabber"]["total_memory"]))
-            self.send_images(size)
-            time.sleep(5)
         
-        # Increase overloading 2
-        print("Increase overloading 2")
-        
-        for _ in range(5):
-            size = random.normalvariate(0.7*self.hosts["CamGrabber"]["total_memory"], 0.1*self.hosts["CamGrabber"]["total_memory"])
-            size = max(0.5*self.hosts["CamGrabber"]["total_memory"], min(size, self.hosts["CamGrabber"]["total_memory"]))
-            self.send_images(size)
-            time.sleep(5)
+            print("Increase overloading 1")
+            # Increase overloading 1
+            for _ in range(5):
+                size = random.normalvariate(0.2*self.hosts["VisionPro"]["total_memory"], 0.06*self.hosts["VisionPro"]["total_memory"])
+                size = max(0.1*self.hosts["VisionPro"]["total_memory"], 0.35* min(size, 0.2*self.hosts["VisionPro"]["total_memory"]))
+                self.send_images(size)
+                time.sleep(5)
             
-        print("Escalate")
-        for _ in range(10):
-            size = random.normalvariate(0.95*self.hosts["CamGrabber"]["total_memory"], 0.03*self.hosts["CamGrabber"]["total_memory"])
-            size = max(0.8*self.hosts["CamGrabber"]["total_memory"], min(size, self.hosts["CamGrabber"]["total_memory"]))
-            self.send_images(size)
-            time.sleep(5)
+            # Increase overloading 2
+            print("Increase overloading 2")
+            
+            for _ in range(5):
+                size = random.normalvariate(0.7*self.hosts["VisionPro"]["total_memory"], 0.1*self.hosts["VisionPro"]["total_memory"])
+                size = max(0.5*self.hosts["VisionPro"]["total_memory"], min(size, self.hosts["VisionPro"]["total_memory"]))
+                self.send_images(size)
+                time.sleep(5)
+                
+            print("Escalate")
+            for _ in range(10):
+                size = random.normalvariate(0.95*self.hosts["VisionPro"]["total_memory"], 0.03*self.hosts["VisionPro"]["total_memory"])
+                size = max(0.8*self.hosts["VisionPro"]["total_memory"], min(size, self.hosts["VisionPro"]["total_memory"]))
+                self.send_images(size)
+                time.sleep(5)
 
-        
-        # self.add_overloading_process()
-        # time.sleep(10)
-        
-        # # start_time =time.time()
-        # # while time.time() - start_time < 300:
-        # brake_state_thread = threading.Thread(target=self.send_brake_state_ok)
-        # tail_light_state_thread = threading.Thread(target=self.send_tail_light_state_ok)
-        # tail_light_command_thread = threading.Thread(target=self.send_tail_light_command_ok)
-        # overloading_thread = threading.Thread(target=self.increase_overloading)
-        # brake_state_thread.start()
-        # tail_light_state_thread.start()
-        # tail_light_command_thread.start()
-        # overloading_thread.start()
         
         
         

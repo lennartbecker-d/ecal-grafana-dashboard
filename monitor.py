@@ -122,7 +122,8 @@ class Monitor:
         self.previous_topics = self.topics
         for topic in topics:
             topic["layer"] = next((item['type'] for item in topic['layer'] if item['active']), None) # it should be exactly 1 layer true per topic, currently verifying
-            topic["throughput"] = int((topic["dfreq"] / 1000 * topic["tsize"])/1000) # should be kBps
+            # topic["throughput"] = int((topic["dfreq"] / 1000 * topic["tsize"])/1000) # should be kBps
+            topic["throughput"] = int((topic["dfreq"] / 1000 * topic["tsize"])/1000)*8 # bandwidth in kbitps
         self.topics = {topic["tid"]: topic for topic in topics}
 
         for tid, topic in self.topics.items():

@@ -228,12 +228,13 @@ def create_process_graph(topics, process_performances):
             )
             node_dict[node_id] = create_node(
                 id=node_id,
-                title=t["hname"],
+                title=t["uname"],
                 subtitle="",
                 mainstat=t["pid"],
                 secondarystat=t["tname"],
                 arcs=arcs,
                 details=details,
+                icon=t["icon"],
             )
         else:
             node_dict[node_id]["mainstat"] = (
@@ -289,7 +290,7 @@ def create_pub_sub_topic_graph(topics, process_performances):
             node_id = t["tid"]
             node_dict[node_id] = create_node(
                 id=node_id,
-                title=t["hname"],
+                title=t["uname"],
                 subtitle="",
                 mainstat=t["pid"],
                 secondarystat=t["tname"],
@@ -315,7 +316,7 @@ def create_pub_sub_topic_graph(topics, process_performances):
             node_id = t["tid"]
             node_dict[node_id] = create_node(
                 id=node_id,
-                title=t["hname"],
+                title=t["uname"],
                 subtitle="",
                 mainstat=t["pid"],
                 secondarystat=t["tname"],
