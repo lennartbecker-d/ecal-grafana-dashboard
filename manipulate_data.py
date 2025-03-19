@@ -1,7 +1,7 @@
 from collections import defaultdict
 import copy
 import time
-import threading
+import math
 import random
 
 class ManipulateData:
@@ -252,7 +252,7 @@ class ManipulateData:
             for topic in self.topics:
                 if host["hname"] == topic["hname"]:
                     tsize += topic["tsize"]
-            tsize /= 2.5
+            tsize /= 2.2
             cpu_load = min(100, tsize/host["total_memory"] * random.randint(95, 105))
             available_memory = max(0, host["total_memory"] - tsize)
             available_disk = max(0, host["capacity_disk"]- tsize) 
@@ -449,7 +449,7 @@ class ManipulateData:
         self.set_tsize(12, size)
         self.set_tsize(21, size2)
 
-        size3 = size2/2 * max(0.1, random.normalvariate(1, 0.3))
+        size3 = max(0, (400000 * math.log10(size2)- 2000000)) * max(0.1, random.normalvariate(1, 0.3))
         self.set_tsize(23, size3)
         self.send_visualization(size3)
         self.create_path(size3)
@@ -465,13 +465,13 @@ class ManipulateData:
         size2 = size * max(0.65, random.normalvariate(0.8, 0.03))
         self.set_tsize(32, size2)
         self.set_message_drops(23, (size-size2)/random.normalvariate(50000, 2000))
-        self.set_message_drops(32, (size-size2)/random.normalvariate(100000, 5000))
+        self.set_message_drops(32, (size-size2)/random.normalvariate(30000, 5000))
     
     def create_path(self, size):
 
         size2 = size * max(0.6, random.normalvariate(0.75, 0.03))
         self.set_tsize(42, size2)
-        self.set_message_drops(42, (size-size2)/random.normalvariate(100000, 5000))
+        self.set_message_drops(42, (size-size2)/random.normalvariate(30000, 5000))
     
     def run_healthy(self):    
         print("Running healthy")
@@ -483,7 +483,7 @@ class ManipulateData:
     
     def increase_overloading_1(self):
         print("Increase overloading 1")
-        for _ in range(5):
+        for _ in range(8):
             size = random.normalvariate(0.2*self.hosts["VisionPro"]["total_memory"], 0.06*self.hosts["VisionPro"]["total_memory"])
             size = max(0.1*self.hosts["VisionPro"]["total_memory"], 0.35* min(size, 0.2*self.hosts["VisionPro"]["total_memory"]))
             self.send_images(size)
@@ -499,7 +499,7 @@ class ManipulateData:
             
     def escalate(self):   
         print("Escalate")
-        for _ in range(10):
+        for _ in range(14):
             size = random.normalvariate(0.95*self.hosts["VisionPro"]["total_memory"], 0.03*self.hosts["VisionPro"]["total_memory"])
             size = max(0.8*self.hosts["VisionPro"]["total_memory"], min(size, self.hosts["VisionPro"]["total_memory"]))
             self.send_images(size)
@@ -520,7 +520,7 @@ class ManipulateData:
         self.start_time = time.time()
         self.reset()
         self.initial_setup()
-        time.sleep(10)
+        time.sleep(5)
         
         # states = [
         #         (self.run_healthy, 0.7),  
@@ -534,6 +534,8 @@ class ManipulateData:
             self.increase_overloading_1()
             self.increase_overloading_2()
             self.escalate()
+            self.increase_overloading_2()
+            self.increase_overloading_1()
             
 
         
