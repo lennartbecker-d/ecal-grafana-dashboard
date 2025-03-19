@@ -160,13 +160,13 @@ class Monitor:
                         if logged and not previous_logged_state.get(state, False):
                             if state == "<60":
                                 level = "warning"
-                                message = f"[CPU SATURATION] investigate host {hname}"
+                                message = f"[CPU WARNING] investigate host {hname}"
                             elif state == "<80":
                                 level = "critical"
-                                message = f"[CPU OVERLOAD] host {hname} is not working properly"
+                                message = f"[CPU CRITICAL] host {hname} is not working properly"
                             elif state == ">=80":
                                 level = "error"
-                                message = f"[CPU FAILURE] loosing host {hname}"
+                                message = f"[CPU ERROR] host {hname} overloaded"
 
                             self.logs.append({
                                 "message": message,

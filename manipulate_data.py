@@ -472,6 +472,47 @@ class ManipulateData:
         size2 = size * max(0.6, random.normalvariate(0.75, 0.03))
         self.set_tsize(42, size2)
         self.set_message_drops(42, (size-size2)/random.normalvariate(100000, 5000))
+    
+    def run_healthy(self):    
+        print("Running healthy")
+        for _ in range(10):
+            size = random.normalvariate(200e3, 60e3)
+            size = max(50e3, min(size, 0.25*self.hosts["VisionPro"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
+    
+    def increase_overloading_1(self):
+        print("Increase overloading 1")
+        for _ in range(5):
+            size = random.normalvariate(0.2*self.hosts["VisionPro"]["total_memory"], 0.06*self.hosts["VisionPro"]["total_memory"])
+            size = max(0.1*self.hosts["VisionPro"]["total_memory"], 0.35* min(size, 0.2*self.hosts["VisionPro"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
+    
+    def increase_overloading_2(self):
+        print("Increase overloading 2")
+        for _ in range(5):
+            size = random.normalvariate(0.7*self.hosts["VisionPro"]["total_memory"], 0.1*self.hosts["VisionPro"]["total_memory"])
+            size = max(0.5*self.hosts["VisionPro"]["total_memory"], min(size, self.hosts["VisionPro"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
+            
+    def escalate(self):   
+        print("Escalate")
+        for _ in range(10):
+            size = random.normalvariate(0.95*self.hosts["VisionPro"]["total_memory"], 0.03*self.hosts["VisionPro"]["total_memory"])
+            size = max(0.8*self.hosts["VisionPro"]["total_memory"], min(size, self.hosts["VisionPro"]["total_memory"]))
+            self.send_images(size)
+            time.sleep(5)
+    
+    def choose_state(states):
+        rand = random.random()
+        cumulative_probability = 0.0
+        for state, probability in states:
+            cumulative_probability += probability
+            if rand < cumulative_probability:
+                return state
+        return states[-1][0]
         
     ######################################################################################################################## 
         
@@ -481,38 +522,19 @@ class ManipulateData:
         self.initial_setup()
         time.sleep(10)
         
+        # states = [
+        #         (self.run_healthy, 0.7),  
+        #         (self.increase_overloading_1, 0.15),  
+        #         (self.increase_overloading_2, 0.1), 
+        #         (self.escalate, 0.05)  
+        #             ]
+        
         while True:
-            # Running healthy
-            for _ in range(10):
-                size = random.normalvariate(200e3, 60e3)
-                size = max(50e3, min(size, 0.25*self.hosts["VisionPro"]["total_memory"]))
-                self.send_images(size)
-                time.sleep(5)
-        
-        
-            print("Increase overloading 1")
-            # Increase overloading 1
-            for _ in range(5):
-                size = random.normalvariate(0.2*self.hosts["VisionPro"]["total_memory"], 0.06*self.hosts["VisionPro"]["total_memory"])
-                size = max(0.1*self.hosts["VisionPro"]["total_memory"], 0.35* min(size, 0.2*self.hosts["VisionPro"]["total_memory"]))
-                self.send_images(size)
-                time.sleep(5)
+            self.run_healthy()
+            self.increase_overloading_1()
+            self.increase_overloading_2()
+            self.escalate()
             
-            # Increase overloading 2
-            print("Increase overloading 2")
-            
-            for _ in range(5):
-                size = random.normalvariate(0.7*self.hosts["VisionPro"]["total_memory"], 0.1*self.hosts["VisionPro"]["total_memory"])
-                size = max(0.5*self.hosts["VisionPro"]["total_memory"], min(size, self.hosts["VisionPro"]["total_memory"]))
-                self.send_images(size)
-                time.sleep(5)
-                
-            print("Escalate")
-            for _ in range(10):
-                size = random.normalvariate(0.95*self.hosts["VisionPro"]["total_memory"], 0.03*self.hosts["VisionPro"]["total_memory"])
-                size = max(0.8*self.hosts["VisionPro"]["total_memory"], min(size, self.hosts["VisionPro"]["total_memory"]))
-                self.send_images(size)
-                time.sleep(5)
 
         
         
