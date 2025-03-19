@@ -14,8 +14,44 @@ The eCAL-Dashboard provides functionality for monitoring the state of the eCAL m
 
 The application consists of a Python script that polls eCAL's Monitoring API at predefined intervals. It subscribes to the "machine_state_[HOSTNAME]"-named topics, to which eCAL's Machine Monitoring Agents (MMAs) publish information regarding individual hosts (CPU, RAM, Disk, etc.). The collected data is then inserted into a SQLite database, which serves as the data source for the Grafana dashboards.
 
-The messages sent by the MMA follow the protobuf specification provided in `proto_messages\mma.proto`. This protofile stems from [here](https://github.com/eclipse-ecal/ecal/blob/8d05b9cea0eeb650ffae2bb107edb7abc5feb29e/app/app_pb/src/ecal/app/pb/mma/mma.proto#L4) and has to be considered in upgrades.  
-## Usage
+The messages sent by the MMA follow the protobuf specification provided in `proto_messages\mma.proto`. This protofile stems from [here](https://github.com/eclipse-ecal/ecal/blob/8d05b9cea0eeb650ffae2bb107edb7abc5feb29e/app/app_pb/src/ecal/app/pb/mma/mma.proto#L4) and has to be considered in upgrades.
+
+## Preps to run in WSL
+
+1. To install a WSL on Windows follow the instructions [here](https://ubuntu.com/desktop/wsl).
+2. [Install](https://de.linux-terminal.com/?p=7616) Python version 3.12.X and set as standard.
+3. Then you need to follow the eCAL installation [here](https://eclipse-ecal.github.io/ecal/stable/getting_started/setup.html#getting-started-setup).
+4. Install the corresponding Ubuntu Python wheel from [here](https://github.com/eclipse-ecal/ecal/actions/runs/13562781226).
+```bash 
+sudo apt-get install eclipse_ecal[...].whl
+```
+5. Install Grafana in WSL like [here](https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/). 
+Start Grafana Server: 
+```bash
+sudo systemctl start grafana-server
+```
+Login on http://localhost:3000/login using ```admin``` as username and password and import the dashboards from .../ecal-grafana-dashboard/grafana/. Add a new Conection from SQLite (Probably also to install) and set ```/mnt/c/Users/d9XXXXX/Documents/XXXXXX/ecal-grafana-dashboard/db/ecal_monitoring.db``` as Path using your individual adjustments. 
+
+6. Use a Virtual Environment like [here](https://python.land/virtual-environments/virtualenv)
+7. Ensure that the required packages are installed. These can be found in the ```requirements.txt``` file. The requirements can be installed using the command:
+```bash 
+pip install -r requirements.txt
+```
+## Usage in WSL
+1. Start eCAL MMA
+```bash 
+/usr/bin/ecal_mma-5.13.3
+```
+2. In root of the Repo start the Virtual Environment
+```bash
+venv/bin/activate
+```
+3. Start Script
+```bash
+python3 monitoring_json.py --interval 1
+```
+
+## Usage in Windows
 
 To monitor the eCAL middleware using the eCAL-Dashboard, follow these steps:
 
