@@ -37,6 +37,8 @@ Login on http://localhost:3000/login using ```admin``` as username and password 
 ```bash 
 pip install -r requirements.txt
 ```
+8. In ```monitor.py``` and ```monitoring_json.py``` adjust path to where DB is saved. Also create DB folder. 
+
 ## Usage in WSL
 1. Start eCAL MMA
 ```bash 
