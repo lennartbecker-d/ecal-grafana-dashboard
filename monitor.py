@@ -232,47 +232,7 @@ class Monitor:
                 ),
                 "cpu_load": round(number=host_dict["cpu_load"]/100, ndigits=2),
                 "icon": host_dict["icon"]
-            }
-            # print(host_dict)
-            # cpu_load = host_dict["cpu_load"]
-            # if cpu_load < 40:
-            #     # Resetting logged_state if cpu_load is less than 40
-            #     host_dict["logged_state"] = {
-            #         "<60": False,
-            #         "<80": False,
-            #         ">=80": False
-            #     }
-            # elif cpu_load < 60 and not host_dict["logged_state"]["<60"]:
-            #     self.logs.append({
-            #         "message": f"[CPU SATURATION] investigate host_dict {host_dict["hname"]}",
-            #         "level": "warning",
-            #     })
-            #     host_dict["logged_state"] = {
-            #         "<60": True,
-            #         "<80": False,
-            #         ">=80": False
-            #     }
-            # elif cpu_load < 80 and not host_dict["logged_state"]["<80"]:
-            #     self.logs.append({
-            #         "message": f"[CPU OVERLOAD] loosing host_dict {host_dict["hname"]}",
-            #         "level": "critical",
-            #     })
-            #     host_dict["logged_state"] = {
-            #         "<60": True,
-            #         "<80": True,
-            #         ">=80": False
-            #     }
-            # elif not host_dict["logged_state"][">=80"]:
-            #     self.logs.append({
-            #         "message": f"[CPU FAILURE] host_dict {host_dict["hname"]} is not working properly",
-            #         "level": "error",
-            #     })
-            #     host_dict["logged_state"] = {
-            #         "<60": True,
-            #         "<80": True,
-            #         ">=80": True
-            #     }
-                
+            }               
             self.host_nodes, self.host_edges = create_host_graph(
                 list(self.topics.values()), hosts
             )
